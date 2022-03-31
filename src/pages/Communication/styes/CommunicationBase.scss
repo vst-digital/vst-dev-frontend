@@ -1,0 +1,23 @@
+.communication-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+
+  .clearfix > div {
+    display: flex;
+    .col-md-9.react-form-builder-preview.float-left {
+      flex: 2;
+    }
+
+    .col-md-3.react-form-builder-toolbar.float-right {
+      flex: 1;
+    }
+  }
+
+  .modal-content {
+    z-index: 1;
+    position: absolute;
+    top: 25vh;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+      rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  }
+}
