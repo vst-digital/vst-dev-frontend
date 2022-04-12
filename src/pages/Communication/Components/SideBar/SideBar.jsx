@@ -1,7 +1,8 @@
 import React from 'react';
 import { ReactFormGenerator, ElementStore } from 'react-form-builder2';
-// import "./css/bootstrap.min.css"
-// import "./css/font-awesome.min.css"
+import { postMemoTemplate, getMemoTemplates, getMemoTemplate } from "shared/services/memo.service";
+import axios from 'axios';
+import { authFailure, authSuccess, checkAuthTimeout } from "store/actions/auth.actions";
 
 export default class SideBar extends React.Component {
   constructor(props) {
@@ -9,10 +10,7 @@ export default class SideBar extends React.Component {
     this.state = {
       data: [],
       previewVisible: false,
-      shortPreviewVisible: false,
-      roPreviewVisible: false,
     };
-
     const update = this._onChange.bind(this);
     ElementStore.subscribe(state => update(state.data));
   }
@@ -20,18 +18,6 @@ export default class SideBar extends React.Component {
   showPreview() {
     this.setState({
       previewVisible: true,
-    });
-  }
-
-  showShortPreview() {
-    this.setState({
-      shortPreviewVisible: true,
-    });
-  }
-
-  showRoPreview() {
-    this.setState({
-      roPreviewVisible: true,
     });
   }
 
@@ -44,13 +30,32 @@ export default class SideBar extends React.Component {
   }
 
   _onChange(data) {
-    this.setState({
-      data,
-    });
+    if (data.length != 0) {
+      this.setState({ data });
+    }
   }
 
-  onConfirm(data) {
-  }
+  _onSubmit = async () => {
+    if (this.state.data.length != 0) {
+      try {
+        axios.defaults.headers['Content-Type'] = 'application/json'
+        axios.defaults.headers["accept"] = 'application/javascript'
+        axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+        axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+        axios.post('http://127.0.0.1:3000/user_memo_templates', {
+          memo_template: {
+            json: this.state.data
+          }
+        })
+        .then(res => {
+          this.props.props.history.push("/memo_template/all")        
+        })
+        .catch(error => console.error(error));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
 
   render() {
     let modalClass = 'modal';
@@ -58,21 +63,10 @@ export default class SideBar extends React.Component {
       modalClass += ' show d-block';
     }
 
-    let shortModalClass = 'modal short-modal';
-    if (this.state.shortPreviewVisible) {
-      shortModalClass += ' show d-block';
-    }
-
-    let roModalClass = 'modal ro-modal';
-    if (this.state.roPreviewVisible) {
-      roModalClass += ' show d-block';
-    }
-
     return (
       <div className="clearfix" style={{ margin: '10px', width: '70%' }}>
         <h4 className="float-left">Preview</h4>
         <button className="btn btn-primary float-right" style={{ marginRight: '10px' }} onClick={this.showPreview.bind(this)}>Preview Form</button>
-
         {this.state.previewVisible &&
           <div className={modalClass}>
             <div className="modal-dialog modal-lg">
@@ -84,14 +78,12 @@ export default class SideBar extends React.Component {
                   answer_data={{}}
                   action_name="Save"
                   variables={this.props.variables}
+                  onChange={this._onChange}
                   data={this.state.data}
-                  onSubmit={() => this.onConfirm(this.state.data)}
-                  hide_actions={true}
+                  onSubmit={this._onSubmit}
+                  hide_actions={false}
                 />
-
                 <div className="modal-footer">
-
-                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.onConfirm.bind(this)}>Save</button>
                   <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Close</button>
                 </div>
               </div>

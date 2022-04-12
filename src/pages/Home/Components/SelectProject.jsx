@@ -34,6 +34,9 @@ const SelectProject = ({ onOpen, onClose, history, location }) => {
     const onConfirm = async () => {
         try {
             localStorage.setItem('project_id', values.id);
+            localStorage.setItem('project_title', values.title);
+            localStorage.setItem('project_status', values.status);
+            localStorage.setItem('project_description', values.project_description);
             history.push('/home');
         } catch (e) {
             notify({ msg: 'Not able to send Invite. Something went wrong!!', type: 'error' });
@@ -73,7 +76,7 @@ const SelectProject = ({ onOpen, onClose, history, location }) => {
                                     id={"project"}
                                     getOptionLabel={getProjectLabel}
                                     loadingMethod={getProjectsList}
-                                    value={values.users}
+                                    value={values}
                                     onChange={onProjectChange}
                                 />
                             </Grid>

@@ -37,7 +37,7 @@ const App = () => {
                     <Notification {...notification}/>
                     {isAuthenticated !== null && (
                         isAuthenticated ?
-                            <MainLayout><Routes isAuthenticated={isAuthenticated}/></MainLayout> :
+                            <MainLayout history={history}><Routes isAuthenticated={isAuthenticated}/></MainLayout> :
                             <MinimalLayout><Routes isAuthenticated={isAuthenticated}/></MinimalLayout>
                     )}
                 </>

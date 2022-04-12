@@ -549,9 +549,11 @@ export const ProjectSchema = {
 
 export const MemberSchema = {
     columns: [
-        {name: 'name', header: 'Name', defaultFlex: 2},
+        {name: 'first_name', header: 'First Name', defaultFlex: 2},
+        {name: 'last_name', header: 'Last Name', defaultFlex: 2},
         {name: 'role', header: 'Role', defaultFlex: 2},
         {name: 'email', header: 'Email', defaultFlex: 2},
+        {name: 'contact', header: 'Contact', defaultFlex: 2},
         {name: 'invitation_status', header: 'Invitation Accepted?', defaultFlex: 2},
         {name: 'created_at', header: 'Created At', defaultFlex: 2},
     ],
@@ -569,5 +571,16 @@ export const GroupSchema = {
     ],
     filter: [
         {name: 'name', type: 'string', operator: 'contains', value: ''},
+    ]
+};
+
+export const MemoTemplateSchema = {
+    columns: [
+        {name: 'id', header: 'ID', defaultFlex: 2},
+        {name: 'number', header: 'Number', defaultFlex: 2},
+    ],
+    filter: [
+        {name: 'id', type: 'string', operator: 'contains', value: ''},
+        {name: 'number', type: 'string', operator: 'contains', value: ''},
     ]
 };

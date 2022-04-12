@@ -53,12 +53,21 @@ const AddMember = ({ onOpen, onClose, history }) => {
                             <Grid item xs={12}>
                                 <Grid container spacing={2} alignItems={"center"}>
                                     <Grid item xs={6}>
-                                        <Typography gutterBottom>Name</Typography>
+                                        <Typography gutterBottom>First Name</Typography>
                                         <TextField
-                                            id="name"
-                                            value={values.name} onChange={handleChange}
-                                            error={touched.name}
-                                            helperText={touched.name && errors.name}
+                                            id="first_name"
+                                            value={values.first_name} onChange={handleChange}
+                                            error={touched.first_name}
+                                            helperText={touched.first_name && errors.first_name}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Typography gutterBottom>Last Name</Typography>
+                                        <TextField
+                                            id="last_name"
+                                            value={values.last_name} onChange={handleChange}
+                                            error={touched.last_name}
+                                            helperText={touched.last_name && errors.last_name}
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
@@ -70,6 +79,16 @@ const AddMember = ({ onOpen, onClose, history }) => {
                                             helperText={touched.email && errors.email}
                                         />
                                     </Grid>
+                                    <Grid item xs={6}>
+                                        <Typography gutterBottom>Contact</Typography>
+                                        <TextField
+                                            id="contact"
+                                            value={values.contact} onChange={handleChange}
+                                            error={touched.contact && Boolean(errors.contact)}
+                                            helperText={touched.contact && errors.contact}
+                                        />
+                                    </Grid>
+                                    
                                     <Grid item xs={6}>
                                         <Typography gutterBottom>Role: " project_admin, project_member "</Typography>
                                         <TextField

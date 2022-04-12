@@ -35,6 +35,7 @@ export const getAddressLabel = (address) => address ? (address.name ? address.na
 export const getMemberLabel = (member) => member ? (member.name ? member.name : member.email) : '';
 export const getProjectLabel = (project) => project ? (project.name ? project.name : project.project_description) : '';
 export const getGroupLabel = (group) => group ? (group.name ? group.name : group.description) : '';
+export const getMemoTemplateLable = (memo_template) => memo_template ? (memo_template.name ? memo_template.name : memo_template.number.toString()) : '';
 
 export const getCurrencyLabel = (amount) => amount ? `${CURRENCY} ${amount}` : `${CURRENCY} 0`;
 

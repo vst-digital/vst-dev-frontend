@@ -19,7 +19,7 @@ const Home = ({ history, location }) => {
             <Container title="Home">
                 <Grid container spacing={2}>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <AvailableProjects></AvailableProjects>
+                        <AvailableProjects history={history} location={location}></AvailableProjects>
                     </Grid>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
                         <ProjectInformation />
@@ -50,12 +50,12 @@ const Home = ({ history, location }) => {
         <Container title="Home">
             <Grid container spacing={2}>
                 <Grid item lg={3} sm={6} xl={3} xs={12}>
-                    <SelectProject></SelectProject>
+                    <SelectProject history={history}></SelectProject>
                 </Grid>
             </Grid>
         </Container>
     );
-    
+     
 };
 
 export default Home;

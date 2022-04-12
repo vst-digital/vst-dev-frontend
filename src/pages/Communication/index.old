@@ -1,0 +1,32 @@
+import Grid from "@material-ui/core/Grid";
+import { Container } from "components";
+import ViewMemo from "./Memo/ViewMemo";
+import CreateUpdateMemo from "./MemoTemplate/CreatorPages/CreateUpdateMemoTemplate";
+
+const Memo = ({ history, location }) => {
+  
+  if (localStorage.getItem('user') == "subscription_owner" || "project_admin") {
+    return (
+      <Container>
+        <Grid>
+          <div className="communication-wrapper">
+            <CreateUpdateMemo />
+          </div>
+        </Grid>
+      </Container>
+    )
+  }
+  else {
+    return (
+      <Container>
+        <Grid>
+          <div className="communication-wrapper"></div>
+          <ViewMemo />
+        </Grid>
+      </Container>
+    )
+  }
+};
+
+export default Memo;
+

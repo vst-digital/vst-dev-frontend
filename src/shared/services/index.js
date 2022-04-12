@@ -23,3 +23,5 @@ export * from "./organization.service";
 export * from "./project.service";
 export * from "./member.service"
 export * from "./groups.service"
+export * from "./memo.service"
+export * from "./project_user_memo.service"

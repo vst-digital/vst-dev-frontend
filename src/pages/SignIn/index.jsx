@@ -78,11 +78,12 @@ const SignIn = ({ history, props }) => {
                 }
             })
                 .then(function (response) {
-                    history.push('/home')
-                    history.go('/home')
                     // const expirationTime = new Date(new Date().getTime() + (expires_in - 60) * 1000);
                     localStorage.setItem('token', response.headers["authorization"])
+                    localStorage.setItem('user', response.data.user.role)
                     localStorage.setItem('expirationTime', 30000000);
+                    history.push('/home')
+                    history.go('/home')
                 })
                 .catch(function (error) {
                     console.log(error);

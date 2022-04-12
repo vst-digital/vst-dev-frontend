@@ -156,12 +156,18 @@ export const Project_Validation = yup.object({
 });
 
 export const Member_Validation = yup.object({
-    name: yup.string().required().label('Name'),
+    first_name: yup.string().required().label('First Name'),
     role: yup.string().required().label('Role'),
     email: yup.string().required().label('Email'),
+    contact: yup.string().required().label('contact'),
 });
 
 export const Group_Validation = yup.object({
     name: yup.string().required().label('Name'),
     description: yup.string().label('Description'),
+});
+
+export const Memo_Validation = yup.object({
+    to: yup.string().required().label('Receiver'),
+    subject: yup.string().required().label('Subject'),
 });

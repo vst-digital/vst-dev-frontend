@@ -8,7 +8,7 @@ const UserInvitation = loadable(() => import("./pages/UserInvitation"));
 // Dashboard
 const Dashboard = loadable(() => import("./pages/Dashboard"));
 const Home = loadable(() => import("./pages/Home"));
-const Communication = loadable(() => import("./pages/Communication"));
+// const Communication = loadable(() => import("./pages/Communication"));
 
 // Route
 // const ROUTE = {
@@ -39,6 +39,24 @@ const GROUP = {
     EDIT : loadable(() => import("./pages/Group/CreateUpdateGroup"))
 }; 
 
+const MEMO = {
+    ALL : loadable(() => import("./pages/Communication/Memo/ViewAllMemo")),
+    VIEW : loadable(() => import("./pages/Communication/Memo/ViewMemo")),
+    NEW : loadable(() => import("./pages/Communication/Memo/CreateMemo")),
+
+}; 
+
+const MEMOTEMPLATE = {
+    ALL : loadable(() => import("./pages/Communication/MemoTemplate/CreatorPages/ViewAllMemoTemplate")),
+    VIEW : loadable(() => import("./pages/Communication/MemoTemplate/CreatorPages/ViewMemoTemplate")),
+    NEW : loadable(() => import("./pages/Communication/MemoTemplate/CreatorPages/CreateUpdateMemoTemplate")),
+    EDIT : loadable(() => import("./pages/Communication/MemoTemplate/CreatorPages/CreateUpdateMemoTemplate")),
+}
+
+const COMMUNICATION = {
+    ALL : loadable(()=> import("./pages/Communication/CommunicationIndex"))
+}
+
 const ACCOUNT = loadable(() => import("./pages/Account"));
 
 const pagesWithoutAuthentication = [
@@ -49,7 +67,7 @@ const pagesWithoutAuthentication = [
 const pagesWithAuthentication = [
     {id: "dashboard", path: "/dashboard", component: Dashboard},
     {id: "home", path: "/home", component: Home},
-    {id: "communications", path: "/communications", component: Communication},
+    {id: "communications", path: "/communications", component: COMMUNICATION.ALL},
     
     {id: "contact", path: "/contacts", component: CONTACT.VIEW},
     {id: "contact_edit", path: "/contact/edit", component: CONTACT.EDIT},
@@ -64,6 +82,16 @@ const pagesWithAuthentication = [
     {id: "group_view", path: "/group/view", component: GROUP.VIEW},
     {id: "group_edit", path: "/group/edit", component: GROUP.EDIT},
     {id: "group_new", path: "/group/new", component: GROUP.NEW},
+    
+    {id: "memo_template_new", path: "/memo_template/new", component: MEMOTEMPLATE.NEW},
+    {id: "memo_template_all", path: "/memo_template/all", component: MEMOTEMPLATE.ALL},
+    {id: "memo_template_edit", path: "/memo_template/edit", component: MEMOTEMPLATE.EDIT},
+    {id: "memo_template_view", path: "/memo_template/view", component: MEMOTEMPLATE.VIEW},
+
+    {id: "memo_new", path: "/memo/new", component: MEMO.NEW},
+    {id: "memo_all", path: "/memo/all", component: MEMO.ALL},
+    {id: "memo_view", path: "/memo/view", component: MEMO.VIEW},
+    
 
 ];
 

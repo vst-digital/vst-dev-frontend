@@ -18,3 +18,5 @@ export * from "./Vehicle";
 export * from "./Organization";
 export * from "./Project";
 export * from "./Group";
+export * from "./MemoTemplate";
+export * from "./Memo";

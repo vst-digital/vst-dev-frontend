@@ -58,12 +58,26 @@ const useStyles = makeStyles(theme => ({
 const AvailableProject = ({ history, location }) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const project = new Project();
+    let selected_project = {
+        id: localStorage.getItem('project_id'),
+        title: localStorage.getItem('project_title'),
+        status: localStorage.getItem('project_status'),
+        project_description: localStorage.getItem('project_description')
+    }
+    const project = new Project(selected_project);
+
     const { notify, requestHandler } = useHttp();
 
     const onProjectChange = (project_instance) => {
-        const project = new Project(project_instance);
-        setValues(project);
+        localStorage.removeItem('project_id');
+        localStorage.removeItem('project_title');
+        localStorage.removeItem('project_status');
+        localStorage.removeItem('project_description');
+        localStorage.setItem('project_id', project_instance.id);
+        localStorage.setItem('project_title', project_instance.title);
+        localStorage.setItem('project_status', project_instance.status);
+        localStorage.setItem('project_description', project_instance.project_description);
+        history.push('/home');
     };
 
     const getProjectsList = () => new Promise((resolve, reject) => {
@@ -88,7 +102,7 @@ const AvailableProject = ({ history, location }) => {
         onSubmit: onConfirm
     });
 
-    
+
 
     return (
         <Card className={classes.root}>
@@ -105,12 +119,12 @@ const AvailableProject = ({ history, location }) => {
                         </Avatar>
                     </Grid>
                 </Grid>
-                <div className={classes.differenceIcon}>
+                <div className={classes.root}>
                     <AsyncSelect
                         id={"projects"}
                         getOptionLabel={getProjectLabel}
                         loadingMethod={getProjectsList}
-                        value={values.users}
+                        value={values}
                         onChange={onProjectChange}
                     />
                 </div>
