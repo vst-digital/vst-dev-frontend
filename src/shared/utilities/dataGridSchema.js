@@ -1,26 +1,26 @@
-import Chip from "@material-ui/core/Chip";
-import Typography from "@material-ui/core/Typography";
-import DateFilter from '@inovua/reactdatagrid-community/DateFilter';
-import NumberFilter from '@inovua/reactdatagrid-community/NumberFilter';
-import SelectFilter from '@inovua/reactdatagrid-community/SelectFilter';
-
-import {
-    capitalizeStr,
-    formatDate,
-    formatDateTime,
-    getAddressLabel,
-    getFullName,
-    getOptionLabel,
-    renderBoolean
-} from "./common.util";
-import {
-    EMPLOYMENT_STATUS,
-    MEMBER_ROLE,
-    POD_STATUS,
-    TOOL_STATUS,
-    TRIP_STATUS,
-    VEHICLE_STATUS
-} from "./referenceData.util";
+// import Chip from "@material-ui/core/Chip";
+// import Typography from "@material-ui/core/Typography";
+// import DateFilter from '@inovua/reactdatagrid-community/DateFilter';
+// import NumberFilter from '@inovua/reactdatagrid-community/NumberFilter';
+// import SelectFilter from '@inovua/reactdatagrid-community/SelectFilter';
+import { formatDateTime } from "./common.util";
+// import {
+//     capitalizeStr,
+//     formatDate,
+//     formatDateTime,
+//     getAddressLabel,
+//     getFullName,
+//     getOptionLabel,
+//     renderBoolean
+// } from "./common.util";
+// import {
+//     EMPLOYMENT_STATUS,
+//     MEMBER_ROLE,
+//     POD_STATUS,
+//     TOOL_STATUS,
+//     TRIP_STATUS,
+//     VEHICLE_STATUS
+// } from "./referenceData.util";
 
 // export const RouteSchema = {
 //     columns: [
@@ -554,8 +554,9 @@ export const MemberSchema = {
         {name: 'role', header: 'Role', defaultFlex: 2},
         {name: 'email', header: 'Email', defaultFlex: 2},
         {name: 'contact', header: 'Contact', defaultFlex: 2},
-        {name: 'invitation_status', header: 'Invitation Accepted?', defaultFlex: 2},
-        {name: 'created_at', header: 'Created At', defaultFlex: 2},
+        {name: 'invitation_status', header: 'Invitation Accepted?', defaultFlex: 2,
+                    render: ({value}) =>  value == true? "Yes" : "No"},
+        {name: 'created_at', header: 'Created At', defaultFlex: 2, render: ({value}) => formatDateTime(value)},
     ],
     filter: [
         {name: 'name', type: 'string', operator: 'contains', value: ''},
@@ -582,5 +583,20 @@ export const MemoTemplateSchema = {
     filter: [
         {name: 'id', type: 'string', operator: 'contains', value: ''},
         {name: 'number', type: 'string', operator: 'contains', value: ''},
+    ]
+};
+
+export const MemoSchema = {
+    // id, :subject, :to, :cc, :bcc, :created_at, :body, :reply_id
+    columns: [
+        {name: 'id', header: 'ID', defaultFlex: 2},
+        {name: 'subject', header: 'Subject', defaultFlex: 2},
+        {name: 'receiver_id', header: 'receiver_id', defaultFlex: 2},
+        {name: 'sender_id', header: 'sender_id', defaultFlex: 2},
+        {name: 'created_at', header: 'Sent At', defaultFlex: 2},
+    ],
+    filter: [
+        {name: 'subject', type: 'string', operator: 'contains', value: ''},
+        {name: 'id', type: 'string', operator: 'contains', value: ''},
     ]
 };

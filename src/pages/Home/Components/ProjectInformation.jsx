@@ -1,5 +1,5 @@
 import { Avatar, Card, CardContent, Grid, makeStyles, Typography } from '@material-ui/core';
-import { ArrowDownwardRounded, MoneyRounded, GroupWorkRounded } from '@material-ui/icons';
+import { AccountTree } from '@material-ui/icons';
 import { Button } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
@@ -49,7 +49,7 @@ const ProjectInformation = ({ history, location }) => {
                     </Grid>
                     <Grid item>
                         <Avatar className={classes.avatar}>
-                            <GroupWorkRounded className={classes.icon} />
+                            <AccountTree className={classes.icon} />
                         </Avatar>
                     </Grid>
                 </Grid>

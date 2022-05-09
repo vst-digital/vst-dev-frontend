@@ -4,27 +4,13 @@ import { useFormik } from "formik";
 import {
   Button,
   Grid,
-  IconButton,
-  InputAdornment,
   makeStyles,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextareaAutosize,
   Typography
 } from "@material-ui/core";
-import AddLocationIcon from "@material-ui/icons/AddLocation";
-import DeleteIcon from "@material-ui/icons/Delete";
-import DownwardIcon from "@material-ui/icons/ArrowDownward";
-import UpwardIcon from "@material-ui/icons/ArrowUpward";
 
 import { useHttp } from "hooks";
 import { AsyncSelect, Container, Panel, TextField } from "components";
 import { Group } from "shared/models";
-import { FIELD_SIZE, HOURS, KM, LATLNG } from "shared/utilities/constant";
 import { Group_Validation } from "shared/utilities/validationSchema.util";
 import { postGroup, putGroup } from "shared/services";
 

@@ -73,10 +73,15 @@ export default class ViewMemoToolbar extends React.Component {
     if (this.state.previewVisible) {
       modalClass += ' show d-block';
     }
-
-
     modalClass = "modal show d-block"
-    const content = this.props.props.location.state.data.memoTemplate.template;
+
+    let content = ""
+    if (this.props.props.location.state.data.memoTemplate) {
+      content = this.props.props.location.state.data.memoTemplate.template;
+    }
+    else {
+      content = this.props.props.location.state.data.memo.body;
+    }
 
 
     return (

@@ -1,164 +1,179 @@
-import { useState } from "react";
-import { Button, makeStyles, Menu, MenuItem, SvgIcon } from "@material-ui/core";
-import AddRounded from "@material-ui/icons/AddRounded";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ViewIcon from "@material-ui/icons/Visibility";
-import MoreIcon from "@material-ui/icons/MoreVert";
-
+import { useState, useEffect } from "react";
+import { Button, makeStyles, Grid, Typography, Card, Paper, styled, Divider, Chip, Avatar } from "@material-ui/core";
+import { DisplayField, Panel, RowDivider } from "components";
 import { useHttp } from "hooks";
-import { ConfirmModal, Container, IndexTable } from "components";
-import { getMemoTemplates, getMemoTemplate, postMemoTemplate, deleteMemoTemplate } from "shared/services";
-import { MemoTemplate } from "shared/models";
-import { MemoTemplateSchema } from "shared/utilities/dataGridSchema";
-import { createArray } from "shared/utilities/common.util";
-
+import { useFormik } from "formik";
+import { postMemoReply } from "shared/services";
+import { Memo, MemoReply } from "shared/models";
+import { Memo_Reply_Validation } from "shared/utilities/validationSchema.util";
+import { createArray, formatDateTime } from "shared/utilities/common.util";
+import { Container } from "components";
+import { ReactFormGenerator, ElementStore } from 'react-form-builder2';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Parser } from 'html-to-react'
+import 'react-form-builder2/dist/app.css';
+import "../Components/SideBar/styes/CommunicationBase.scss"
+import actionCable from "actioncable";
+import * as React from 'react';
+import useSound from 'use-sound';
+import alertSound from '../../../assets/sounds/alert.wav'
 const useStyles = makeStyles(theme => ({
-    moreBtn: {
-        cursor: "pointer",
-        "&:hover": { color: theme.palette.primary.dark }
-    },
-    actionIcon: {
-        "& > :not(:last-child)": {
-            marginRight: theme.spacing(1.5),
-            fontSize: theme.spacing(2.5)
-        }
+  divPadding: {
+    padding: "4%"
+  },
+  communication_wrapper: {
+    padding: "2%"
+  },
+  editor: {
+    "& .ck-editor__main > .ck-editor__editable": {
+      minHeight: "200px"
     }
+  },
+  panelMargin: {
+    marginTop: "1%",
+    marginBottom: "1%"
+  },
 }))
 
-const ViewMemberMemo = ({ history }) => {
-    const classes = useStyles();
-    const { notify, requestHandler } = useHttp();
-    const [refreshTable, setRefreshTable] = useState(false);
-    const [confirmModal, setConfirmModal] = useState({ open: false, data: null, title: '' });
-    const [anchorElList, setAnchorElList] = useState([]);
+const ViewMemberMemo = (props) => {
+  const classes = useStyles();
+  const { notify, requestHandler } = useHttp();
+  const memo = props?.location?.state?.data?.memo;
+  const memo_replies = memo?.project_user_memo_replies;
+  const [reply, setReply] = useState();
+  const memo_reply = new MemoReply();
+  const [play] = useSound(alertSound);
+  
 
-    const renderActions = (row) => (<>
-        <SvgIcon component={MoreIcon} className={classes.moreBtn} onClick={e => setAnchorElement(e, row.id)} />
-        <Menu
-            anchorEl={anchorElList[row.id]}
-            keepMounted
-            open={Boolean(anchorElList[row.id])}
-            onClose={() => clearAnchorElement(row.id)}
-            getContentAnchorEl={null}
-            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-            transformOrigin={{ vertical: "top", horizontal: "left" }}
-        >
-            <MenuItem onClick={() => viewHandler(row.id)} className={classes.actionIcon}>
-                <ViewIcon color={"action"} /> View
-            </MenuItem>
-            <MenuItem onClick={() => editHandler(row.id)} className={classes.actionIcon}>
-                <EditIcon color={"action"} /> Edit
-            </MenuItem>
-            <MenuItem onClick={() => openConfirmModal(row.id)} className={classes.actionIcon}>
-                <DeleteIcon color={"action"} /> Delete
-            </MenuItem>
-        </Menu>
-    </>);
-
-    const setAnchorElement = (e, index) => {
-        e.stopPropagation();
-        let newAnchorElList = [...anchorElList];
-        newAnchorElList[index] = e.currentTarget;
-        setAnchorElList(newAnchorElList);
-    };
-
-    const clearAnchorElement = (index) => {
-        let newAnchorElList = [...anchorElList];
-        newAnchorElList[index] = null;
-        setAnchorElList(newAnchorElList);
-    };
-
-    const getMemoTemplateList = ({ per_page, page_no, sort, filter }) => new Promise(async (resolve) => {
-        try {
-            const res = await requestHandler(getMemoTemplates({ per_page, page_no, sort, filter }));
-            const data = res.data;
-            const count = res.meta.pagination.count;
-            setAnchorElList(createArray(data.length));
-            resolve({ data, count });
-        } catch (e) {
-            console.error(e);
-            setAnchorElList([]);
-            resolve({ data: [], count: 0 });
-        }
-    });
-
-    const openConfirmModal = (data) => {
-        clearAnchorElement(data);
-        setConfirmModal({
-            ...confirmModal, open: true, data,
-            title: `Do you want to delete this Template?`
-        });
-    };
-
-    const closeConfirmModal = async (isConfirm) => {
-        setConfirmModal({ ...confirmModal, open: false });
-        if (isConfirm) {
-            await deleteHandler(confirmModal.data);
-        }
-    };
-
-    const onAddClick = () => history.push(`/memo/new`, { data: { action: 'Add', memoTemplate: new MemoTemplate() } });
-
-    const editHandler = async (id) => {
-        clearAnchorElement(id);
-        try {
-            const params = {};
-            const res = await requestHandler(getMemoTemplate(id, params), { loader: true });
-            history.push(`/memo/edit`, { data: { action: 'Edit', memoTemplate: new MemoTemplate(res.data) } });
-        } catch (e) {
-            notify({ msg: 'Not able to get selected route. Something went wrong!!', type: 'error' });
-        }
-    };
-
-    const deleteHandler = async (id) => {
-        try {
-            await requestHandler(deleteMemoTemplate(id), { loader: true });
-            notify({ msg: 'Template has been deleted successfully.', type: 'success' });
-            setRefreshTable(true);
-            setTimeout(() => {
-                setRefreshTable(false)
-            });
-        } catch (e) {
-            notify({ msg: 'Not able to delete selected Template. Something went wrong!!', type: 'error' });
-        }
-    };
-
-    const viewHandler = async (id) => {
-        try {
-            const res = await requestHandler(getMemoTemplate(id), { loader: true });
-            history.push(`/memo/view`, { data: { action: 'View', memoTemplate: new MemoTemplate(res.data) } });
-        }catch(e){
-            notify({msg: 'Something went wrong', type: 'error'});
-        }
+  const onConfirm = async () => {
+    values.project_user_memo_id = memo.id;
+    const payload = { project_user_memo_reply: values };
+    try {
+      const requestConfig = postMemoReply(payload);
+      await requestHandler(requestConfig, { loader: true });
+      notify({ msg: 'Reply has been sent successfully!!', type: 'success' });
+    } catch (e) {
+      notify({ msg: 'Not able to send reply. Something went wrong!!', type: 'error' });
     }
+  };
 
-    return (
-        <>
-            <ConfirmModal
-                title={confirmModal.title}
-                open={confirmModal.open}
-                close={closeConfirmModal}
-            />
-            <Container title="Template" actions={
-                <Button variant="contained" color="primary" startIcon={<AddRounded />} onClick={onAddClick}>
-                    Create Template
-                </Button>
-            }>
-                {!refreshTable && <IndexTable
-                    columns={[
-                        {
-                            name: 'actions', header: '', defaultWidth: 60, textAlign: 'center',
-                            render: ({ data }) => renderActions(data)
-                        },
-                        ...MemoTemplateSchema.columns
-                    ]}
-                    defaultFilterValue={MemoTemplateSchema.filter}
-                    loadData={getMemoTemplateList}
-                />}
-            </Container>
-        </>
-    );
+  const onEditorChange = (data) => {
+    const memo_reply = new MemoReply(values);
+    memo_reply.content = data;
+    setValues(memo_reply);
+  }
+
+  const { values, touched, errors, handleChange, handleSubmit, setValues, setFieldError } = useFormik({
+    initialValues: memo_reply,
+    validationSchema: Memo_Reply_Validation,
+    onSubmit: onConfirm
+  });
+
+  useEffect(
+    () => {
+      const CableApp = {}
+      CableApp.cable = actionCable.createConsumer('ws://localhost:3000/cable')
+      CableApp.cable.subscriptions.create({
+        channel: 'MemoReplyChannel',
+        room: localStorage.getItem('user_id'),
+        user: localStorage.getItem('token')
+      },
+        {
+          received: (res) => {
+            const data = JSON.parse(res["message"])
+            setReply(prev => [...prev, data.data.attributes]);
+            const memo_reply = new MemoReply(values);
+            memo_reply.content = "";
+            setValues(memo_reply);
+            document.getElementsByClassName("ck-editor__editable")[0].textContent = "";
+            play();
+          },
+          connected: () => {
+            console.log("Online")
+          }
+        });
+    },
+    []
+  )
+
+  useEffect(() => {
+    setTimeout(() => {
+      setReply(memo_replies);
+      play();
+    }, 1000);
+  },[]);
+
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
+
+
+  return (<>
+    <Container className={classes.divPadding}>
+      <Grid>
+        <Card className={classes.communication_wrapper}>
+        {/* <button onClick={playSound}>Boop!</button>; */}
+          <Typography variant="h3">{memo.subject}</Typography>
+          <Divider variant="fullWidth" component="div" />
+          <Chip className={classes.panelMargin} avatar={<Avatar>{memo.sender.first_name[0]}</Avatar>} variant="outlined" label={memo.sender.email} /> To: {memo.receiver.email}
+          <Divider variant="fullWidth" component="div" />
+          <ReactFormGenerator
+            back_action="/"
+            back_name="Back"
+            answer_data={memo.answers}
+            action_name="Save"
+            data={memo.body}
+            hide_actions={true}
+            read_only
+          />
+        </Card>
+      </Grid>
+    </Container>
+    <Container>
+      {reply && reply.map(reply =>
+        <div className={classes.panelMargin}>
+          <Panel title={reply.created_by.email}>
+            <Grid container spacing={2}>
+              {/* <Item>{formatDateTime(reply.created_at)}</Item> */}
+              {/* <Typography variant="body1">{formatDateTime(reply.created_at)}</Typography> */}
+              <Divider variant="fullWidth" component="div" />
+              <Typography variant="body1">{Parser().parse(reply.content)}</Typography>
+            </Grid>
+          </Panel>
+        </div>
+
+      )}
+      <Grid>
+        <form onSubmit={handleSubmit}>
+          <Container className={classes.communication_wrapper} actions={
+            <>
+              <Button type="submit" color="primary" variant="contained">Reply</Button>
+            </>
+          }>
+            <div className={classes.editor}>
+              <CKEditor
+                id={"content"}
+                value={values.content}
+                editor={ClassicEditor}
+                onReady={editor => {
+                }}
+                className={classes.ckEditor}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  onEditorChange(data);
+                }}
+              />
+            </div>
+          </Container>
+        </form>
+      </Grid>
+    </Container>
+  </>)
 };
 
 export default ViewMemberMemo;

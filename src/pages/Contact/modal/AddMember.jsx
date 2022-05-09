@@ -1,11 +1,13 @@
 import * as React from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Grid } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Grid, Select } from "@material-ui/core";
 import { TextField } from "components";
 import { useFormik } from "formik";
 import { Member_Validation } from "shared/utilities/validationSchema.util";
 import { Member } from "shared/models";
 import { postMemberInvite } from "shared/services";
 import { useHttp } from "hooks";
+import MenuItem from '@material-ui/core/MenuItem';
+
 
 const AddMember = ({ onOpen, onClose, history }) => {
     const [open, setOpen] = React.useState(false);
@@ -32,6 +34,12 @@ const AddMember = ({ onOpen, onClose, history }) => {
             notify({ msg: 'Not able to send Invite. Something went wrong!!', type: 'error' });
         }
     };
+
+    const onRoleChange= (role_instance) =>{
+        const member = new Member(values)
+        member.role = role_instance.target.value
+        setValues(member)
+    }
 
     const { values, touched, errors, handleChange, handleSubmit, setValues, setFieldError } = useFormik({
         initialValues: member,
@@ -90,13 +98,27 @@ const AddMember = ({ onOpen, onClose, history }) => {
                                     </Grid>
                                     
                                     <Grid item xs={6}>
-                                        <Typography gutterBottom>Role: " project_admin, project_member "</Typography>
-                                        <TextField
+                                        <Typography gutterBottom>Role:</Typography>
+                                        {/* <TextField
                                             id="role"
                                             value={values.role} onChange={handleChange}
                                             error={touched.role && Boolean(errors.role)}
                                             helperText={touched.role && errors.role}
-                                        />
+                                        /> */}
+                                        <Select
+                                            labelId="role"
+                                            id="role"
+                                            value={values.role}
+                                            label="Role"
+                                            onChange={onRoleChange}
+                                            displayEmpty
+                                            error={touched.role && Boolean(errors.role)}
+                                            helperText={touched.role && errors.role}
+                                            >
+                                            <MenuItem value="">Select One</MenuItem>
+                                            <MenuItem value={"project_admin"}>Project Admin</MenuItem>
+                                            <MenuItem value={"project_member"}>Project Member</MenuItem>
+                                        </Select>
                                     </Grid>
                                 </Grid>
                             </Grid>

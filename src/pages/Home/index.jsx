@@ -9,12 +9,13 @@ import ProjectInformation from "./Components/ProjectInformation";
 import ProjectSettings from "./Components/ProjectSettings";
 import Reports from "./Components/Reports";
 import SelectProject from "./Components/SelectProject";
-import { Button } from "@material-ui/core";
-
+import ChatModule from './Components/ChatModule'
+import ChatBox from './Components/ChatBox'
 
 const Home = ({ history, location }) => {
+    
     const project_id = localStorage.getItem('project_id');
-    if (project_id){
+    if (project_id) {
         return (
             <Container title="Home">
                 <Grid container spacing={2}>
@@ -22,27 +23,29 @@ const Home = ({ history, location }) => {
                         <AvailableProjects history={history} location={location}></AvailableProjects>
                     </Grid>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <ProjectInformation />
+                        <ProjectInformation history={history} location={location}/>
                     </Grid>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <ProjectSettings history={history}/>
+                        <ProjectSettings history={history} location={location} />
                     </Grid>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <Communication history={history}/>
+                        <Communication history={history} location={location} />
                     </Grid>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <Calander />
+                        <Calander history={history} location={location}/>
                     </Grid>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <DocumentManager />
+                        <DocumentManager history={history} location={location}/>
                     </Grid>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <Library />
+                        <Library history={history} location={location}/>
                     </Grid>
                     <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <Reports />
+                        <Reports history={history} location={location}/>
                     </Grid>
                 </Grid>
+               <ChatModule></ChatModule>
+               {/* <ChatBox></ChatBox> */}
             </Container>
         );
     }
@@ -55,7 +58,7 @@ const Home = ({ history, location }) => {
             </Grid>
         </Container>
     );
-     
+
 };
 
 export default Home;

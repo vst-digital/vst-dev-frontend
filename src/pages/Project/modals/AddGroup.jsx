@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Grid } from "@material-ui/core";
-import { TextField, AsyncSelect } from "components";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from "@material-ui/core";
+import { AsyncSelect } from "components";
 import { useFormik } from "formik";
 import { Project_Validation } from "shared/utilities/validationSchema.util";
 import { Group } from "shared/models";
@@ -9,7 +9,6 @@ import { useHttp } from "hooks";
 import {
     getSelectDataSource,
     getGroupLabel,
-    hasError
 } from "shared/utilities/common.util";
 
 const AddGroup = ({ onOpen, onClose, history, location }) => {

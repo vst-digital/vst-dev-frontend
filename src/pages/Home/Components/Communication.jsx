@@ -1,5 +1,5 @@
 import { Avatar, Card, CardContent, Grid, makeStyles, Typography, Button } from '@material-ui/core';
-import { ArrowDownwardRounded, ChatBubble } from '@material-ui/icons';
+import { ChatBubble } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   root: {

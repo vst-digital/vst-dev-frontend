@@ -8,7 +8,7 @@ class Project{
       status = '',
       project_description = '',
       groups = [],
-      _destroy = false
+      // _destroy = false
     } = props || {};
     this.id = id;
     this.title = title;

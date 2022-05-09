@@ -1,15 +1,5 @@
 import {
-    Avatar,
-    Button,
-    Checkbox,
     Container,
-    FormControlLabel,
-    Grid,
-    InputAdornment,
-    Link,
-    makeStyles,
-    Paper,
-    Typography
 } from "@material-ui/core";
 
 const UserInvitation = ({ history, props }) => {

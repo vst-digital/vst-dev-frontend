@@ -85,9 +85,6 @@ const ViewOrganization = ({ history, location }) => {
                 </CardActions>
               </Card>
             </Grid> */}
-
-            <Grid container spacing={2} alignItems={"center"} className={cx(classes.marTp)}>
-              <Grid item xs={12}>
                 <IndexTable
                   columns={[
                     {
@@ -99,8 +96,6 @@ const ViewOrganization = ({ history, location }) => {
                   defaultFilterValue={MemberSchema.filter}
                   loadData={getMembersList}
                 />
-              </Grid>
-            </Grid>
           </Panel>
         </Grid>
       </Grid>

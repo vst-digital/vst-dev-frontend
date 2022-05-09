@@ -4,42 +4,38 @@ import { Collapse, colors, Drawer, List, ListItem, makeStyles, SvgIcon, Typograp
 import {
     ArrowDropDown,
     ArrowDropUp,
-    Build,
-    Business,
     ContactMail,
     Dashboard,
-    FindInPage,
-    LocalCarWash,
-    LocalShipping,
-    Map,
-    Navigation,
-    Person,
-    ReportProblem,
     SettingsApplications,
-    ViewAgenda,
     Category,
-    Groups,
-    Badge,
-    AccountTree
+    AccountTree,
+    ChatBubble,
 } from "@material-ui/icons";
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+
 import cn from "classnames";
 import Scrollbar from "react-custom-scrollbars-2";
 
 import { computeHeight, getInitials } from "../../../../shared/utilities/common.util";
 
 const navList = [
-    // { id: "dashboard", path: "/dashboard", label: 'Dashboard', icon: Dashboard },
     { id: "home", path: "/home", label: 'Home', icon: Dashboard },
+    { id: "communications", path: "/communications", label: 'Communication', icon: ChatBubble },
+    {
+        id: "project_setting", label: "Project Setting", icon: SettingsApplications, subMenu: [
+            { id: "groups", path: "/groups", label: 'Groups' },
+            { id: "roles", path: "/roles", label: 'Role' },
+            { id: "permissions", path: "/permissions", label: 'Permission' },
+        ]
+    },
+    { id: "projectInformation", path: "/projectInformation", label: 'Project Information', icon: AccountTree },
     { id: "contacts_id", path: "/contacts", label: 'Members', icon: ContactMail },
-    { id: "groups", path: "/groups", label: 'Groups', icon: Person },
-    // { id: "project", path: "/projects", label: 'Project', icon: ViewAgenda },
-    { id: "project", path: "/projects", label: 'Role', icon: ViewAgenda },
-    // {
-    //     id: "project", label: "Project", icon: AccountTree, subMenu: [
-    //         { id: "create", path: "/project", label: 'Create Project' },
-    //         { id: "index", path: "/projects", label: 'All Projects' },
-    //     ]
-    // },
+    { id: "calander", path: "/calander", label: 'Calander', icon: CalendarTodayIcon },
+    { id: "documentManager", path: "/documentManager", label: 'Document Manager', icon: ContactMail },
+    { id: "library", path: "/library", label: 'Library', icon: MenuBookIcon },
+    { id: "report", path: "/report", label: 'Report', icon: LibraryBooksIcon },
     
 ];
 

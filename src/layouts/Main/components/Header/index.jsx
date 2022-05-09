@@ -90,7 +90,7 @@ const Header = ({handlerSidebarAction, openSidebar, ...props}) => {
                 </IconButton>
                 <div className={classes.flexGrow}/>
                 <div>
-                    <Avatar className={classes.avatar} onClick={e => setAnchorEl(e.currentTarget)}>TU</Avatar>
+                    <Avatar className={classes.avatar} onClick={e => setAnchorEl(e.currentTarget)}>{localStorage.getItem('initials')}</Avatar>
                     <Menu
                         id="avatar-menu"
                         anchorEl={anchorEl}
@@ -107,7 +107,7 @@ const Header = ({handlerSidebarAction, openSidebar, ...props}) => {
                                 <AccountCircleRounded/>
                             </Avatar>
                             <div className={classes.userDetails}>
-                                <Typography variant="subtitle1">Toro User</Typography>
+                                <Typography variant="subtitle1">{localStorage.getItem('user_name')}</Typography>
                             </div>
                         </div>
                         <Divider/>

@@ -81,6 +81,9 @@ const SignIn = ({ history, props }) => {
                     // const expirationTime = new Date(new Date().getTime() + (expires_in - 60) * 1000);
                     localStorage.setItem('token', response.headers["authorization"])
                     localStorage.setItem('user', response.data.user.role)
+                    localStorage.setItem('user_id', response.data.user.id)
+                    localStorage.setItem('user_name', response.data.user.first_name)
+                    localStorage.setItem('initials', response.data.user.first_name.slice(0, 2))
                     localStorage.setItem('expirationTime', 30000000);
                     history.push('/home')
                     history.go('/home')

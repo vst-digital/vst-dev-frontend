@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     },
     difference: {
         marginTop: theme.spacing(2),
-        display: 'flex',
+        display: 'block',
         alignItems: 'center'
     },
     differenceIcon: {
@@ -119,7 +119,7 @@ const AvailableProject = ({ history, location }) => {
                         </Avatar>
                     </Grid>
                 </Grid>
-                <div className={classes.root}>
+                <div className={classes.difference}>
                     <AsyncSelect
                         id={"projects"}
                         getOptionLabel={getProjectLabel}

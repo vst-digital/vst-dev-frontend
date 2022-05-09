@@ -56,7 +56,7 @@ const ViewGroup = ({ history, location }) => {
               actions={[{ id: 'add', label: 'Add', action: () => "" }]}
               schema={[
                 { id: 'id', label: '#', render: (_, i) => (i + 1) },
-                { id: 'name', label: 'Name', render: row => row.name },
+                { id: 'name', label: 'Name', render: row => row.first_name },
                 { id: 'email', label: 'Email', render: row => row.email },
                 { id: 'role', label: 'Role', render: row => row.role },
                 { id: 'created_at', label: 'Created At', render: row => row.created_at },

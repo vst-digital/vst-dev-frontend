@@ -202,7 +202,7 @@ class RouteStop {
         const {
             id = '',
             position,
-            address_id = '',
+            // address_id = '',
             address = null,
             distance = 0,
             stop_duration = 0,

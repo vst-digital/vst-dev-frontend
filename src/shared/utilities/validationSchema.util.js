@@ -168,6 +168,9 @@ export const Group_Validation = yup.object({
 });
 
 export const Memo_Validation = yup.object({
-    to: yup.string().required().label('Receiver'),
+    receiver_id: yup.array().required().label('Receiver'),
     subject: yup.string().required().label('Subject'),
+});
+
+export const Memo_Reply_Validation = yup.object({
 });

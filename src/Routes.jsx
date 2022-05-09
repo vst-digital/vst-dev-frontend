@@ -57,7 +57,7 @@ const COMMUNICATION = {
     ALL : loadable(()=> import("./pages/Communication/CommunicationIndex"))
 }
 
-const ACCOUNT = loadable(() => import("./pages/Account"));
+// const ACCOUNT = loadable(() => import("./pages/Account"));
 
 const pagesWithoutAuthentication = [
     {id: "signIn", path: "/signIn", component: SIGN_IN},
@@ -107,7 +107,7 @@ const Routes = ({isAuthenticated}) => {
     return (
         <Switch>
             {getRoutes()}
-            {/* {console.log(getRoutes())} */}
+            {console.log(isAuthenticated)}
             {/* <Redirect exact from="/user_invitation" to={!isAuthenticated ? "/user_invitation" : "/dashboard"}/> */}
             <Redirect exact from="/" to={isAuthenticated ? "/dashboard" : "/signIn"}/>
         </Switch>
