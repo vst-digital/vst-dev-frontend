@@ -183,8 +183,8 @@ const CreateMemberMemo = ({ history, location }) => {
                       multiple
                       // freesolo
                     />
-                    <a onClick={() => setCcPerview(true)} className={classes.link}>Cc</a>
-                    <a onClick={() => setBccPerview(true)} className={classes.link}>Bcc</a>
+                    {/* <a onClick={() => setCcPerview(true)} className={classes.link}>Cc</a> */}
+                    {/* <a onClick={() => setBccPerview(true)} className={classes.link}>Bcc</a> */}
                 </Grid>
                 
                 {/* {ccPerview && <Grid item xs={6}>

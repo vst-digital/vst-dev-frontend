@@ -1,13 +1,16 @@
 import * as React from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Grid, Select } from "@material-ui/core";
-import { TextField } from "components";
+import { TextField, AsyncSelect } from "components";
 import { useFormik } from "formik";
 import { Member_Validation } from "shared/utilities/validationSchema.util";
 import { Member } from "shared/models";
-import { postMemberInvite } from "shared/services";
+import { postMemberInvite, getGroups } from "shared/services";
 import { useHttp } from "hooks";
 import MenuItem from '@material-ui/core/MenuItem';
-
+import {
+    getSelectDataSource,
+    getGroupLabel
+  } from "shared/utilities/common.util";
 
 const AddMember = ({ onOpen, onClose, history }) => {
     const [open, setOpen] = React.useState(false);
@@ -40,6 +43,19 @@ const AddMember = ({ onOpen, onClose, history }) => {
         member.role = role_instance.target.value
         setValues(member)
     }
+
+    const getGroupList = () => new Promise((resolve, reject) => {
+        const params = { per_page: 500, page_no: 1, sort: 'created_at.desc' };
+        getSelectDataSource(requestHandler, getGroups(params))
+          .then(res => resolve(res.data))
+          .catch(error => reject(error));
+      });
+
+      const onGroupChange = (group_instance) => {
+          const member = new Member(values)
+          member.group = group_instance
+          setValues(member);
+      }
 
     const { values, touched, errors, handleChange, handleSubmit, setValues, setFieldError } = useFormik({
         initialValues: member,
@@ -99,12 +115,6 @@ const AddMember = ({ onOpen, onClose, history }) => {
                                     
                                     <Grid item xs={6}>
                                         <Typography gutterBottom>Role:</Typography>
-                                        {/* <TextField
-                                            id="role"
-                                            value={values.role} onChange={handleChange}
-                                            error={touched.role && Boolean(errors.role)}
-                                            helperText={touched.role && errors.role}
-                                        /> */}
                                         <Select
                                             labelId="role"
                                             id="role"
@@ -119,6 +129,18 @@ const AddMember = ({ onOpen, onClose, history }) => {
                                             <MenuItem value={"project_admin"}>Project Admin</MenuItem>
                                             <MenuItem value={"project_member"}>Project Member</MenuItem>
                                         </Select>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                    <Typography gutterBottom>Select Group</Typography>
+                                    <AsyncSelect
+                                        id={"group"}
+                                        getOptionLabel={getGroupLabel}
+                                        loadingMethod={getGroupList}
+                                        value={values.group}
+                                        onChange={onGroupChange}
+                                        error={touched.group && Boolean(errors.group)}
+                                        helperText={touched.group && errors.group}
+                                    />
                                     </Grid>
                                 </Grid>
                             </Grid>

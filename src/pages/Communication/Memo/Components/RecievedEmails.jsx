@@ -46,7 +46,7 @@ const RecievedEmails = ({ history }) => {
     const [loading, setLoading] = useState();
 
     const CableApp = {}
-    CableApp.cable = actionCable.createConsumer('ws://localhost:3000/cable')
+    CableApp.cable = actionCable.createConsumer(process.env.REACT_APP_BASE_CABLE)
     CableApp.cable.subscriptions.create({
         channel: 'MemoChannel',
         room: localStorage.getItem('user_id'),

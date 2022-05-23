@@ -73,7 +73,7 @@ const ViewMemberMemo = (props) => {
   useEffect(
     () => {
       const CableApp = {}
-      CableApp.cable = actionCable.createConsumer('ws://localhost:3000/cable')
+      CableApp.cable = actionCable.createConsumer(process.env.REACT_APP_BASE_CABLE)
       CableApp.cable.subscriptions.create({
         channel: 'MemoReplyChannel',
         room: localStorage.getItem('user_id'),

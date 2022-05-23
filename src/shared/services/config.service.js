@@ -28,4 +28,10 @@ instance.interceptors.request.use(req => {
 // RESPONSE INTERCEPTOR
 instance.interceptors.response.use(res => {
     return deserialize(res.data);
-}, error => Promise.reject(error));
+},
+(error) => {
+  if(error.message  === 'Request failed with status code 401'){
+    alert("Session ended, Please login again.");
+  }
+  return Promise.reject(error)
+});

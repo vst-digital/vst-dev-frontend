@@ -9,6 +9,7 @@ class Member{
         contact = '',
         invitation_status = false,
         created_at = '',
+        group = '',
         _destroy = false
       } = props || {};
       this.id = id;
@@ -17,6 +18,7 @@ class Member{
       this.contact = contact;
       this.role = role;
       this.email = email;
+      this.group = group;
       this.invitation_status = invitation_status;
       this.created_at = created_at;
     }

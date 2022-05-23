@@ -42,7 +42,7 @@ export default class SideBar extends React.Component {
         axios.defaults.headers["accept"] = 'application/javascript'
         axios.defaults.headers["Authorization"] = localStorage.getItem("token");
         axios.defaults.headers["Project"] = localStorage.getItem("project_id");
-        axios.post('http://127.0.0.1:3000/user_memo_templates', {
+        axios.post(`${process.env.REACT_APP_API_BASE_URL}/user_memo_templates`, {
           memo_template: {
             json: this.state.data
           }

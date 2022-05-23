@@ -91,8 +91,6 @@ const pagesWithAuthentication = [
     {id: "memo_new", path: "/memo/new", component: MEMO.NEW},
     {id: "memo_all", path: "/memo/all", component: MEMO.ALL},
     {id: "memo_view", path: "/memo/view", component: MEMO.VIEW},
-    
-
 ];
 
 const Routes = ({isAuthenticated}) => {
@@ -107,8 +105,7 @@ const Routes = ({isAuthenticated}) => {
     return (
         <Switch>
             {getRoutes()}
-            {console.log(isAuthenticated)}
-            {/* <Redirect exact from="/user_invitation" to={!isAuthenticated ? "/user_invitation" : "/dashboard"}/> */}
+            <Redirect from="/user_invitation/accept" to={!isAuthenticated ? "/dashboard" : "/user_invitation/accept"}/>
             <Redirect exact from="/" to={isAuthenticated ? "/dashboard" : "/signIn"}/>
         </Switch>
     );

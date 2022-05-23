@@ -15,18 +15,30 @@ export const authLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('expirationTime');
+    localStorage.removeItem('user');
+    localStorage.removeItem('user_name');
+    localStorage.removeItem('project_status');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('project_id');
+    localStorage.removeItem('project_title');
+    localStorage.removeItem('project_description');
+    localStorage.removeItem('initials');
     return {type: AUTH_LOGOUT};
 };
 
 export const authCheckState = (history) => (dispatch => {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken');
-    if (!token) {
+    if (!token && (history.location.pathname != '/user_invitation/accept')) {
         dispatch(authLogout());
         history.push('/signIn');
-    } else {
+    } else if (history.location.pathname == '/user_invitation/accept') {
+        dispatch(authLogout());
+        history.push(history.location.pathname+history.location.search);
+    }
+    else {
         const expirationTime = new Date(localStorage.getItem('expirationTime'));
-        if (expirationTime <= new Date()) {
+        if (expirationTime <= new Date() && localStorage.getItem('expirationTime')) {
             dispatch(authLogout());
             history.push('/signIn');
         } else {

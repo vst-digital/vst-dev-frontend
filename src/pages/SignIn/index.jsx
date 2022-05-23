@@ -71,7 +71,7 @@ const SignIn = ({ history, props }) => {
         try {
             axios.defaults.headers['Content-Type'] = 'application/json'
             axios.defaults.headers["accept"] = 'application/javascript'
-            axios.post('http://127.0.0.1:3000/users/sign_in', {
+            axios.post(process.env.REACT_APP_AUTH_API_BASE_URL, {
                 user: {
                     email: username,
                     password: password
@@ -151,9 +151,9 @@ const SignIn = ({ history, props }) => {
                         <Grid item xs>
                             <Link href="#" variant="body1">Forgot password?</Link>
                         </Grid>
-                        <Grid item>
+                        {/* <Grid item>
                             <Link href="#" variant="body1">Don't have an account? Sign Up</Link>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                 </form>
             </Paper>

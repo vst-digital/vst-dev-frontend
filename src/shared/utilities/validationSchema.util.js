@@ -160,6 +160,7 @@ export const Member_Validation = yup.object({
     role: yup.string().required().label('Role'),
     email: yup.string().required().label('Email'),
     contact: yup.string().required().label('contact'),
+    group: yup.object().required().label('group'),
 });
 
 export const Group_Validation = yup.object({
@@ -173,4 +174,9 @@ export const Memo_Validation = yup.object({
 });
 
 export const Memo_Reply_Validation = yup.object({
+});
+
+export const AcceptInvitation = yup.object({
+    token: yup.string().required('Token is required'),
+    password: yup.string().required('Password is required')
 });

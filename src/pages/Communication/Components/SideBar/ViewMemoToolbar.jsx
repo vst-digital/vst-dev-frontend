@@ -54,7 +54,7 @@ export default class ViewMemoToolbar extends React.Component {
       axios.defaults.headers['Content-Type'] = 'application/json'
       axios.defaults.headers["accept"] = 'application/javascript'
       axios.defaults.headers["Authorization"] = localStorage.getItem("Authorization");
-      axios.post('http://127.0.0.1:3000/user_memo_templates', {
+      axios.post(process.env.REACT_APP_API_BASE_URL + '/user_memo_templates', {
         memo_template: {
           json: values
         }
