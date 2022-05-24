@@ -116,6 +116,7 @@ const Routes = ({isAuthenticated}) => {
     return (
         <Switch>
             {getRoutes()}
+            <Redirect from="/user_invitation/accept" to={!isAuthenticated ? "/dashboard" : "/user_invitation/accept"}/>
             {console.log(isAuthenticated)}
             <Redirect exact from="/user_invitation" to={!isAuthenticated ? "/user_invitation" : "/dashboard"}/>
             <Redirect exact from="/" to={isAuthenticated ? "/dashboard" : "/signIn"}/>
