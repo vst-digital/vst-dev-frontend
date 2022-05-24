@@ -33,7 +33,7 @@ const navList = [
     { id: "projectInformation", path: "/projectInformation", label: 'Project Information', icon: AccountTree },
     { id: "contacts_id", path: "/contacts", label: 'Members', icon: ContactMail },
     { id: "calander", path: "/calander", label: 'Calander', icon: CalendarTodayIcon },
-    { id: "documentManager", path: "/documentManager", label: 'Document Manager', icon: ContactMail },
+    { id: "documentManager", path: "/storages", label: 'Document Manager', icon: ContactMail },
     { id: "library", path: "/library", label: 'Library', icon: MenuBookIcon },
     { id: "report", path: "/report", label: 'Report', icon: LibraryBooksIcon },
     

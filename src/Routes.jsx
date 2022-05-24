@@ -8,6 +8,7 @@ const UserInvitation = loadable(() => import("./pages/UserInvitation"));
 // Dashboard
 const Dashboard = loadable(() => import("./pages/Dashboard"));
 const Home = loadable(() => import("./pages/Home"));
+const STORAGE = loadable(() => import("./pages/Storage/Storage"));
 // const Communication = loadable(() => import("./pages/Communication"));
 
 // Route
@@ -24,6 +25,12 @@ const CONTACT = {
     NEW : loadable(() => import("./pages/Contact/CreateUpdateContact")),
     EDIT : loadable(() => import("./pages/Contact/CreateUpdateContact"))
 }; 
+// const STORAGE = {
+//     ALL : loadable(() => import("./pages/Storage/Storage")),
+//     VIEW : loadable(() => import("./pages/Storage/Storage")),
+//     NEW : loadable(() => import("./pages/Storage/Storage")),
+//     EDIT : loadable(() => import("./pages/Storage/Storage"))
+// }; 
 
 const PROJECT = {
     ALL : loadable(() => import("./pages/Project/ViewAllProject")),
@@ -69,6 +76,8 @@ const pagesWithAuthentication = [
     {id: "home", path: "/home", component: Home},
     {id: "communications", path: "/communications", component: COMMUNICATION.ALL},
     
+    {id: "storage", path: "/storages", component: STORAGE},
+   
     {id: "contact", path: "/contacts", component: CONTACT.VIEW},
     {id: "contact_edit", path: "/contact/edit", component: CONTACT.EDIT},
     {id: "contact_new", path: "/contact/new", component: CONTACT.NEW},
@@ -91,6 +100,8 @@ const pagesWithAuthentication = [
     {id: "memo_new", path: "/memo/new", component: MEMO.NEW},
     {id: "memo_all", path: "/memo/all", component: MEMO.ALL},
     {id: "memo_view", path: "/memo/view", component: MEMO.VIEW},
+    
+
 ];
 
 const Routes = ({isAuthenticated}) => {
@@ -105,7 +116,8 @@ const Routes = ({isAuthenticated}) => {
     return (
         <Switch>
             {getRoutes()}
-            <Redirect from="/user_invitation/accept" to={!isAuthenticated ? "/dashboard" : "/user_invitation/accept"}/>
+            {console.log(isAuthenticated)}
+            <Redirect exact from="/user_invitation" to={!isAuthenticated ? "/user_invitation" : "/dashboard"}/>
             <Redirect exact from="/" to={isAuthenticated ? "/dashboard" : "/signIn"}/>
         </Switch>
     );
