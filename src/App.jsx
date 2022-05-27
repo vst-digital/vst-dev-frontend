@@ -18,8 +18,8 @@ Chart.helpers.extend(Chart.elements.Rectangle.prototype, {draw: draw});
 
 const App = () => {
     const history = useHistory();
-    // const isAuthenticated = useSelector(store => store.auth.isAuthenticated);
-    const isAuthenticated = "true"
+    const isAuthenticated = useSelector(store => store.auth.isAuthenticated);
+    // const isAuthenticated = "true"
     const isLoading = useSelector(store => store.auth.loading);
     const notification = useSelector(store => store.config.notification);
     const dispatch = useDispatch();
