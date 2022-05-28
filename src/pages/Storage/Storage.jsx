@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect, useHttp } from "react";
 import FileManager, {
   Permissions,
   Toolbar,
@@ -9,24 +10,51 @@ import FileManager, {
   Details,
   Column
 } from "devextreme-react/file-manager";
-import { fileItems } from "./data.js";
+import { Data, fileItems } from "./data.js";
+import { StorageFolder } from "shared/models";
+import {useFormik} from "formik";
+import axios from 'axios';
+import {getUserStorages, postUserStorage, putUserStorage, deleteUserStorage} from "shared/services"
+import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+
+const fileSystemProvider =() => {
+  console.log("in the file system provider")
+    try {
+      axios.defaults.headers['Content-Type'] = 'application/json'
+      axios.defaults.headers["accept"] = 'application/javascript'
+      axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+      axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+      axios.get(`${process.env.REACT_APP_API_BASE_URL}/user_storages`, {
+      })
+      .then(res => {
+        this.props.props.history.push("/memo_template/all")        
+      })
+      .catch(error => console.error(error));
+    } catch (e) {
+      console.log(e);
+    }
+}
 
 class App extends React.Component {
-  
   fileManagerAttributes = {
     id: 'elementId',
     class: 'class-name',
   }
-  
+
   constructor(props) {
     super(props);
+    this.state = {
+      fileItemsOne : []
+    } 
     this.fileManagerRef = React.createRef();
     this.onCurrentDirectoryChanged = this.onCurrentDirectoryChanged.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
     this.createFile = this.createFile.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
     this.onOptionChanged = this.onOptionChanged.bind(this);
-    
+    this._onFolderCreate = this._onFolderCreate.bind(this);
+    const storageFolder = new StorageFolder();
+
     this.newFileMenuOptions = {
       items: [
         {
@@ -46,50 +74,69 @@ class App extends React.Component {
       ],
       onItemClick: this.onItemClick.bind(this)
     };
-    
+
     this.share = {
       items: [
         {
           text: "Share",
           icon: "share",
           items: [
-             {
+            {
               text: "Member",
             },
             {
               text: "Group",
             },
-           
+
           ]
         }
       ],
       onItemClick: this.onItemClick.bind(this)
     };
 
-     this.state = {
+    this.state = {
       itemViewMode: 'thumbnails',
     };
 
+
+    this.onFileUploading = (e) => {
+      const directory = this.fileManager.getCurrentDirectory()
+
+      const newUpload = {
+        __KEY__: Date.now(),
+        name: `${e.fileData.name}`,
+        isDirectory: false,
+        parent_id: `${directory.key}`,
+        size: `${e.fileData.size}`,
+      };
+      console.log(newUpload)              //  upload data is stored here
+
+      if (!directory.isDirectory) { return false; }
+
+      // let array = null;
+      //   array = fileItems;
+      // array.push(newUpload);
+      return true;
+    };
+
     
-      this.onFileUploading = (e) => {
-        const directory = this.fileManager.getCurrentDirectory()
+  }
 
-        const newUpload = {
-          __KEY__: Date.now(),
-          name: `${e.fileData.name}`,
-          isDirectory: false,      
-          parent_id: `${directory.key}`,
-          size: `${e.fileData.size}`,
-           };
-        console.log(newUpload)              //  upload data is stored here
-            
-        if (!directory.isDirectory) {return false;}
-
-        // let array = null;
-        //   array = fileItems;
-          // array.push(newUpload);
-          return true;
-        };
+  componentWillMount = () => {
+    try {
+      axios.defaults.headers['Content-Type'] = 'application/json'
+      axios.defaults.headers["accept"] = 'application/javascript'
+      axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+      axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+      axios.get(`${process.env.REACT_APP_API_BASE_URL}/user_storages`, {
+      })
+      .then(res => {
+        this.setState({ fileItemsOne: res.data.data.map(item => item.attributes) })   
+      })
+      .catch(error => console.error(error));
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   createFile(
@@ -97,19 +144,19 @@ class App extends React.Component {
     directory = this.fileManager.getCurrentDirectory()) {
 
     const response = prompt("Folder Name")
-    if(response === '')return;
+    if (response === '') return;
 
     const newFile = {
       __KEY__: Date.now(),
       name: `${response}${fileExtension}`,
-      isDirectory: false,      
+      isDirectory: false,
       parent_id: `${directory.key}`,
       size: 0
     };
 
     console.log(newFile)              //  create new file data is stored here
 
-    if (!directory.isDirectory) {return false;}
+    if (!directory.isDirectory) { return false; }
 
     let array = null;
     if (!directory.dataItem) {
@@ -128,19 +175,21 @@ class App extends React.Component {
   createFolder(
     fileExtension,
     directory = this.fileManager.getCurrentDirectory()
-    
-    ) {
+
+  ) {
     const response = prompt("Folder Name")
-    if(response === '')return;
+    if (response === '') return;
 
     const newFolder = {
       __KEY__: Date.now(),
       name: `${response}`,
-      isDirectory: true,      
-      parent_id: `${directory.key}`,
-
+      isDirectory: true,
+      parent_id: `${directory.key}`, // TODO: IT is blank for some reason
       size: 0
     };
+    const storageFolder = new StorageFolder(newFolder);
+    storageFolder.parent_id = newFolder.__KEY__
+    this._onFolderCreate(storageFolder)
     console.log(newFolder)              // new folder data is stored here
 
     if (!directory.isDirectory) {
@@ -157,52 +206,89 @@ class App extends React.Component {
         directory.dataItem.items = array;
       }
     }
-    
+
     array.push(newFolder);
     return true;
   }
 
   onOptionChanged(e) {
-   if (e.fullName === 'itemView.mode') {
-     this.setState({
-       itemViewMode: e.value,
-       
-      });
-    }
-    }
-
-  onCurrentDirectoryChanged(e) {
+    if (e.fullName === 'itemView.mode') {
       this.setState({
-        currentPath: e.component.option('currentPath'),
-        
+        itemViewMode: e.value,
+
       });
     }
+  }
 
-  render() 
-  {
-        return (
+  onCurrentDirectoryChanged = async (e) => {
+    this.setState({
+      currentPath: e.component.option('currentPath'),
+    });
+    try {
+      axios.defaults.headers['Content-Type'] = 'application/json'
+      axios.defaults.headers["accept"] = 'application/javascript'
+      axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+      axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+      axios.get(`${process.env.REACT_APP_API_BASE_URL}/user_storages/${e.directory.dataItem.id}`, {
+        user_storage: {
+          __KEY__: e.directory.dataItem.__KEY__
+        }
+      })
+      .then(res => {
+        this.setState({ fileItemsOne: res.data.data.map(item => item.attributes) })        
+      })
+      .catch(error => console.error(error));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  _onFolderCreate = async (folder) => {
+    if (folder) {
+      try {
+        axios.defaults.headers['Content-Type'] = 'application/json'
+        axios.defaults.headers["accept"] = 'application/javascript'
+        axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+        axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+        axios.post(`${process.env.REACT_APP_API_BASE_URL}/user_storages`, {
+          user_storage: {
+            json: folder
+          }
+        })
+        .then(res => {
+          this.setState({ fileItemsOne: res.data.data.map(item => item.attributes) })     
+        })
+        .catch(error => console.error(error));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  render() {
+    return (
 
       <FileManager
-          ref={this.fileManagerRef}
-          fileSystemProvider={fileItems}
-          onContextMenuItemClick={this.onItemClick}
-          onOptionChanged={this.onOptionChanged}
-          customizeThumbnail={this.customizeIcon}
-          onCurrentDirectoryChanged={this.onCurrentDirectoryChanged}
-          elementAttr={this.fileManagerAttributes}
-          onFileUploading={this.onFileUploading}
-          height={450}
+        ref={this.fileManagerRef}
+        fileSystemProvider={this.state.fileItemsOne}
+        onContextMenuItemClick={this.onItemClick}
+        onOptionChanged={this.onOptionChanged}
+        customizeThumbnail={this.customizeIcon}
+        onCurrentDirectoryChanged={this.onCurrentDirectoryChanged}
+        elementAttr={this.fileManagerAttributes}
+        onFileUploading={this.onFileUploading}
+        height={450}
       >
         <Permissions
-            // create={true}
-            // copy={true}
-            // move={true}
-            // delete={true}
-            // rename={true}
-            upload={true}
-            // download={true}
-            // edit={true}
-            >
+          // create={true}
+          // copy={true}
+          // move={true}
+          // delete={true}
+          // rename={true}
+          upload={true}
+        // download={true}
+        // edit={true}
+        >
         </Permissions>
         <ItemView showParentFolder={false}>
           <Details>
@@ -220,7 +306,7 @@ class App extends React.Component {
             location="before"
             options={this.newFileMenuOptions}
           />
-          <Item name="upload"/>
+          <Item name="upload" />
           <Item name="refresh" />
           <Item name="separator" location="after" />
           <Item name="switchView" />
@@ -234,9 +320,9 @@ class App extends React.Component {
           <FileSelectionItem name="download" />
           <FileSelectionItem name="separator" />
           <FileSelectionItem
-               widget="dxMenu"
-              location="before"
-              options={this.share}
+            widget="dxMenu"
+            location="before"
+            options={this.share}
           />
           <FileSelectionItem name="separator" />
           <FileSelectionItem name="delete" />
@@ -249,9 +335,9 @@ class App extends React.Component {
           <Item name="move" />
           <Item name="delete" />
           <Item text="Share" icon="share" beginGroup="true">
-              <Item text="Member" />
-              <Item text="Group" />
-         </Item>
+            <Item text="Member" />
+            <Item text="Group" />
+          </Item>
           <Item name="download" />
         </ContextMenu>
       </FileManager>
@@ -270,7 +356,7 @@ class App extends React.Component {
     if (itemData.extension === "") {
       updated = this.createFolder(itemData.extension, fileSystemItem);
     }
-     else if (itemData.category !== undefined) {
+    else if (itemData.category !== undefined) {
       updated = this.updateCategory(
         itemData.category,
         fileSystemItem,
@@ -280,11 +366,11 @@ class App extends React.Component {
 
     if (updated) {
       this.fileManager.refresh();
-          // console.log(itemData)
+      // console.log(itemData)
     }
   }
 
-  
+
   updateCategory(newCategory, directory, viewArea) {
     let items = null;
 
@@ -302,7 +388,7 @@ class App extends React.Component {
 
     return items.length > 0;
   }
-  
+
   customizeIcon(fileSystemItem) {
     if (fileSystemItem.isDirectory) {
       return 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/folder.svg';
@@ -314,10 +400,10 @@ class App extends React.Component {
         return 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/doc-txt.svg';
       case '.pdf':
         return 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg';
-      
+
       case '.xml':
         return 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/doc-xml.svg';
-       case '.xlsx':
+      case '.xlsx':
         return 'https://www.logo.wine/a/logo/Microsoft_Excel/Microsoft_Excel-Logo.wine.svg';
       default:
         return 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/doc-txt.svg';

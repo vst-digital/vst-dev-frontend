@@ -21,3 +21,4 @@ export * from "./Group";
 export * from "./MemoTemplate";
 export * from "./Memo";
 export * from "./MemoReply";
+export * from "./StorageFolder";
