@@ -55,7 +55,7 @@ const ProjectSettings = ({ history, location }) => {
                 </Grid>
                 <div className={classes.difference}>
                     <Button variant="outlined" color="primary" size="small" onClick={() => history.push('/groups')}>Groups</Button>
-                    <Button variant="outlined" color="primary" size="small" onClick={() => history.push('/roles')}>Roles</Button>
+                    <Button variant="outlined" color="primary" size="small" onClick={() => history.push('/contacts')}>Members</Button>
                     <Button variant="outlined" color="primary" size="small" onClick={() => history.push('/permissions')}>Permissions</Button>
                 </div>
             </CardContent>

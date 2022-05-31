@@ -8,32 +8,14 @@ import FileManager, {
   FileSelectionItem,
   ItemView,
   Details,
-  Column
+  Column,
+  Upload
 } from "devextreme-react/file-manager";
 import { Data, fileItems } from "./data.js";
 import { StorageFolder } from "shared/models";
-import {useFormik} from "formik";
 import axios from 'axios';
 import {getUserStorages, postUserStorage, putUserStorage, deleteUserStorage} from "shared/services"
-import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
-const fileSystemProvider =() => {
-  console.log("in the file system provider")
-    try {
-      axios.defaults.headers['Content-Type'] = 'application/json'
-      axios.defaults.headers["accept"] = 'application/javascript'
-      axios.defaults.headers["Authorization"] = localStorage.getItem("token");
-      axios.defaults.headers["Project"] = localStorage.getItem("project_id");
-      axios.get(`${process.env.REACT_APP_API_BASE_URL}/user_storages`, {
-      })
-      .then(res => {
-        this.props.props.history.push("/memo_template/all")        
-      })
-      .catch(error => console.error(error));
-    } catch (e) {
-      console.log(e);
-    }
-}
 
 class App extends React.Component {
   fileManagerAttributes = {
@@ -91,7 +73,7 @@ class App extends React.Component {
           ]
         }
       ],
-      onItemClick: this.onItemClick.bind(this)
+      onShareClick: this.onShareClick.bind(this)
     };
 
     this.state = {
@@ -119,7 +101,31 @@ class App extends React.Component {
       return true;
     };
 
-    
+    this.onFileUploaded = (e) => {
+      try {
+        // const formData = new FormData()
+        // formData.append('file', e.fileData, e.fileData.name)
+        const filedata = e.fileData
+        debugger
+        const directory = this.fileManager.getCurrentDirectory()
+        axios.defaults.headers['Content-Type'] = 'multipart/form-data'
+        axios.defaults.headers["accept"] = 'application/json'
+        axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+        axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+        axios.post(`${process.env.REACT_APP_API_BASE_URL}/user_storages/attach_file`, {
+          user_storage: {
+            file: filedata
+          }
+        })
+        .then(res => {
+          debugger;
+          this.setState({ fileItemsOne: res.data.data.map(item => item.attributes) })   
+        })
+        .catch(error => console.error(error));
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 
   componentWillMount = () => {
@@ -153,7 +159,7 @@ class App extends React.Component {
       parent_id: `${directory.key}`,
       size: 0
     };
-
+    debugger;
     console.log(newFile)              //  create new file data is stored here
 
     if (!directory.isDirectory) { return false; }
@@ -187,6 +193,7 @@ class App extends React.Component {
       parent_id: `${directory.key}`, // TODO: IT is blank for some reason
       size: 0
     };
+    debugger;
     const storageFolder = new StorageFolder(newFolder);
     storageFolder.parent_id = newFolder.__KEY__
     this._onFolderCreate(storageFolder)
@@ -206,7 +213,6 @@ class App extends React.Component {
         directory.dataItem.items = array;
       }
     }
-
     array.push(newFolder);
     return true;
   }
@@ -243,6 +249,10 @@ class App extends React.Component {
     }
   }
 
+  onShareClick = (e) =>{
+    debugger;
+  }
+
   _onFolderCreate = async (folder) => {
     if (folder) {
       try {
@@ -264,85 +274,7 @@ class App extends React.Component {
       }
     }
   };
-
-  render() {
-    return (
-
-      <FileManager
-        ref={this.fileManagerRef}
-        fileSystemProvider={this.state.fileItemsOne}
-        onContextMenuItemClick={this.onItemClick}
-        onOptionChanged={this.onOptionChanged}
-        customizeThumbnail={this.customizeIcon}
-        onCurrentDirectoryChanged={this.onCurrentDirectoryChanged}
-        elementAttr={this.fileManagerAttributes}
-        onFileUploading={this.onFileUploading}
-        height={450}
-      >
-        <Permissions
-          // create={true}
-          // copy={true}
-          // move={true}
-          // delete={true}
-          // rename={true}
-          upload={true}
-        // download={true}
-        // edit={true}
-        >
-        </Permissions>
-        <ItemView showParentFolder={false}>
-          <Details>
-            <Column dataField="thumbnail"></Column>
-            <Column dataField="name"></Column>
-            <Column dataField="dateModified"></Column>
-            <Column dataField="size"></Column>
-          </Details>
-        </ItemView>
-        <Toolbar>
-          <Item name="showNavPane" visible="true" />
-          <Item name="separator" />
-          <Item
-            widget="dxMenu"
-            location="before"
-            options={this.newFileMenuOptions}
-          />
-          <Item name="upload" />
-          <Item name="refresh" />
-          <Item name="separator" location="after" />
-          <Item name="switchView" />
-
-          <FileSelectionItem name="rename" />
-          <FileSelectionItem name="separator" />
-          <FileSelectionItem name="copy" />
-          <FileSelectionItem name="separator" />
-          <FileSelectionItem name="move" />
-          <FileSelectionItem name="separator" />
-          <FileSelectionItem name="download" />
-          <FileSelectionItem name="separator" />
-          <FileSelectionItem
-            widget="dxMenu"
-            location="before"
-            options={this.share}
-          />
-          <FileSelectionItem name="separator" />
-          <FileSelectionItem name="delete" />
-          <FileSelectionItem name="separator" />
-          <FileSelectionItem name="clearSelection" />
-        </Toolbar>
-        <ContextMenu>
-          <Item name="rename" beginGroup="true" />
-          <Item name="copy" />
-          <Item name="move" />
-          <Item name="delete" />
-          <Item text="Share" icon="share" beginGroup="true">
-            <Item text="Member" />
-            <Item text="Group" />
-          </Item>
-          <Item name="download" />
-        </ContextMenu>
-      </FileManager>
-    );
-  }
+  
 
   get fileManager() {
     return this.fileManagerRef.current.instance;
@@ -408,6 +340,91 @@ class App extends React.Component {
       default:
         return 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/doc-txt.svg';
     }
+  }
+
+  render() {
+    return (
+      <>
+      <FileManager
+        ref={this.fileManagerRef}
+        fileSystemProvider={this.state.fileItemsOne}
+        onContextMenuItemClick={this.onItemClick}
+        onOptionChanged={this.onOptionChanged}
+        customizeThumbnail={this.customizeIcon}
+        onCurrentDirectoryChanged={this.onCurrentDirectoryChanged}
+        elementAttr={this.fileManagerAttributes}
+        onFileUploading={this.onFileUploading}
+        onFileUploaded={this.onFileUploaded}
+        height={450}
+      >
+        <Upload 
+            chunkSize={500000} 
+            maxFileSize={1000000}
+        />
+        <Permissions
+          // create={true}
+          // copy={true}
+          // move={true}
+          // delete={true}
+          // rename={true}
+          upload={true}
+        // download={true}
+        // edit={true}
+        >
+        </Permissions>
+        <ItemView showParentFolder={false}>
+          <Details>
+            <Column dataField="thumbnail"></Column>
+            <Column dataField="name"></Column>
+            <Column dataField="dateModified"></Column>
+            <Column dataField="size"></Column>
+          </Details>
+        </ItemView>
+        <Toolbar>
+          <Item name="showNavPane" visible="true" />
+          <Item name="separator" />
+          <Item
+            widget="dxMenu"
+            location="before"
+            options={this.newFileMenuOptions}
+          />
+          <Item name="upload" />
+          <Item name="refresh" />
+          <Item name="separator" location="after" />
+          <Item name="switchView" />
+
+          <FileSelectionItem name="rename" />
+          <FileSelectionItem name="separator" />
+          <FileSelectionItem name="copy" />
+          <FileSelectionItem name="separator" />
+          <FileSelectionItem name="move" />
+          <FileSelectionItem name="separator" />
+          <FileSelectionItem name="download" />
+          <FileSelectionItem name="separator" />
+          <FileSelectionItem
+            widget="dxMenu"
+            location="before"
+            options={this.share}
+          />
+          <FileSelectionItem name="separator" />
+          <FileSelectionItem name="delete" />
+          <FileSelectionItem name="separator" />
+          <FileSelectionItem name="clearSelection" />
+        </Toolbar>
+        <ContextMenu>
+          <Item name="rename" beginGroup="true" />
+          <Item name="copy" />
+          <Item name="move" />
+          <Item name="delete" />
+          <Item text="Share" icon="share" beginGroup="true">
+            <Item text="Member" />
+            <Item text="Group" />
+          </Item>
+          <Item name="download" />
+        </ContextMenu>
+      </FileManager>
+      </>
+    );
   }
 }
 

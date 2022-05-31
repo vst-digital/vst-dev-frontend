@@ -76,7 +76,7 @@ const pagesWithAuthentication = [
     {id: "home", path: "/home", component: Home},
     {id: "communications", path: "/communications", component: COMMUNICATION.ALL},
     
-    {id: "storage", path: "/storages", component: STORAGE},
+    {id: "library", path: "/library", component: STORAGE},
    
     {id: "contact", path: "/contacts", component: CONTACT.VIEW},
     {id: "contact_edit", path: "/contact/edit", component: CONTACT.EDIT},
@@ -117,7 +117,6 @@ const Routes = ({isAuthenticated}) => {
         <Switch>
             {getRoutes()}
             <Redirect from="/user_invitation/accept" to={!isAuthenticated ? "/dashboard" : "/user_invitation/accept"}/>
-            {console.log(isAuthenticated)}
             <Redirect exact from="/user_invitation" to={!isAuthenticated ? "/user_invitation" : "/dashboard"}/>
             <Redirect exact from="/" to={isAuthenticated ? "/dashboard" : "/signIn"}/>
         </Switch>
