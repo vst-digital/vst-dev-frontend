@@ -5,12 +5,7 @@ import Calander from "./Components/Calander";
 import Communication from "./Components/Communication";
 import DocumentManager from "./Components/DocumentManager";
 import Library from "./Components/Library";
-import ProjectInformation from "./Components/ProjectInformation";
-import ProjectSettings from "./Components/ProjectSettings";
-import Reports from "./Components/Reports";
-import SelectProject from "./Components/SelectProject";
 import ChatModule from './Components/ChatModule'
-import ChatBox from './Components/ChatBox'
 
 const MemberView = ({ history, location }) => {
     const user = localStorage.getItem("user");

@@ -11,11 +11,11 @@ import cn from "classnames";
 import Scrollbar from "react-custom-scrollbars-2";
 import { computeHeight, getInitials } from "../../../../shared/utilities/common.util";
 
-var navList = memberList
+var navList = [...memberList];
 
-const user = localStorage.getItem("user");
- if ( user === "site_owner" ){ navList = siteOwnerList }
- else if ( user === "project_admin" ){ navList = adminList }
+const role = localStorage.getItem("user");
+ if ( role === "site_owner" ){ navList = [...memberList, ...siteOwnerList] }
+ else if ( role === "project_admin" ){ navList = [...memberList, ...adminList] }
         
 const useStyles = makeStyles((theme) => ({
     flexGrow: { flexGrow: 1 },
