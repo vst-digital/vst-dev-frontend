@@ -106,15 +106,23 @@ class App extends React.Component {
       return true;
     };
 
-    this.onFileUploaded = async ({ fileData }) => {
+    this.onFileUploaded = async (e) => {
       try {
         // const formData = new FormData()
         // formData.append('file', e.fileData, e.fileData.name)
+        const filedata = await convertBlobToBase64(e.fileData);
 
-        const filedata = await convertBlobToBase64(fileData);
+        const newUpload = {
+          __KEY__: Date.now(),
+          name: `${e.fileData.name}`,
+          isDirectory: false,
+          parent_id: `${e.parentDirectory.key}`,
+          size: `${e.fileData.size}`,
+          data: `${filedata}`
+        };
 
         const directory = this.fileManager.getCurrentDirectory();
-        axios.defaults.headers["Content-Type"] = "multipart/form-data";
+        axios.defaults.headers["Content-Type"] = "application/json";
         axios.defaults.headers["accept"] = "application/json";
         axios.defaults.headers["Authorization"] = localStorage.getItem("token");
         axios.defaults.headers["Project"] = localStorage.getItem("project_id");
@@ -122,9 +130,8 @@ class App extends React.Component {
           .post(
             `${process.env.REACT_APP_API_BASE_URL}/user_storages/attach_file`,
             {
-              user_storage: {
-                file: filedata,
-              },
+              user_storage: newUpload,
+              id: e.parentDirectory.key
             }
           )
           .then((res) => {
