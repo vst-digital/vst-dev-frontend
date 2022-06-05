@@ -11,7 +11,7 @@ import FileManager, {
   Column,
   Upload,
 } from "devextreme-react/file-manager";
-import { Data, fileItems } from "./data.js";
+import { fileItems } from "./data.js";
 import { StorageFolder } from "shared/models";
 import axios from "axios";
 import {
@@ -32,6 +32,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       fileItemsOne: [],
+      parentFolder: "",
     };
     this.fileManagerRef = React.createRef();
     this.onCurrentDirectoryChanged = this.onCurrentDirectoryChanged.bind(this);
@@ -84,44 +85,22 @@ class App extends React.Component {
       itemViewMode: "thumbnails",
     };
 
-    this.onFileUploading = (e) => {
-      const directory = this.fileManager.getCurrentDirectory();
-
-      const newUpload = {
-        __KEY__: Date.now(),
-        name: `${e.fileData.name}`,
-        isDirectory: false,
-        parent_id: `${directory.key}`,
-        size: `${e.fileData.size}`,
-      };
-      console.log(newUpload); //  upload data is stored here
-
-      if (!directory.isDirectory) {
-        return false;
-      }
-
-      // let array = null;
-      //   array = fileItems;
-      // array.push(newUpload);
-      return true;
-    };
 
     this.onFileUploaded = async (e) => {
       try {
-        // const formData = new FormData()
-        // formData.append('file', e.fileData, e.fileData.name)
+        let parent_id = ""
+        parent_id = e.parentDirectory.dataItem?.id ? e.parentDirectory.dataItem.id : this.state.parentFolder
+        parent_id = parent_id == undefined ? "" : parent_id;
         const filedata = await convertBlobToBase64(e.fileData);
-
         const newUpload = {
           __KEY__: Date.now(),
           name: `${e.fileData.name}`,
           isDirectory: false,
-          parent_id: `${e.parentDirectory.key}`,
+          parent_id: `${parent_id}`,
           size: `${e.fileData.size}`,
           data: `${filedata}`
         };
 
-        const directory = this.fileManager.getCurrentDirectory();
         axios.defaults.headers["Content-Type"] = "application/json";
         axios.defaults.headers["accept"] = "application/json";
         axios.defaults.headers["Authorization"] = localStorage.getItem("token");
@@ -131,7 +110,7 @@ class App extends React.Component {
             `${process.env.REACT_APP_API_BASE_URL}/user_storages/attach_file`,
             {
               user_storage: newUpload,
-              id: e.parentDirectory.key
+              id: parent_id
             }
           )
           .then((res) => {
@@ -202,21 +181,20 @@ class App extends React.Component {
 
   createFolder(
     fileExtension,
-    directory = this.fileManager.getCurrentDirectory()
+    directory = this.fileManager.getCurrentDirectory(),
+    itemData,
   ) {
     const response = prompt("Folder Name");
     if (response === "") return;
-
     const newFolder = {
       __KEY__: Date.now(),
       name: `${response}`,
       isDirectory: true,
-      parent_id: `${directory.key}`, // TODO: IT is blank for some reason
+      parent_id: `${this.state.parentFolder == undefined ? "" : this.state.parentFolder}`, // TODO: IT is blank for some reason
       size: 0,
     };
 
     const storageFolder = new StorageFolder(newFolder);
-    storageFolder.parent_id = newFolder.__KEY__;
     this._onFolderCreate(storageFolder);
     console.log(newFolder); // new folder data is stored here
 
@@ -250,6 +228,9 @@ class App extends React.Component {
     this.setState({
       currentPath: e.component.option("currentPath"),
     });
+    this.setState({
+      parentFolder: e.directory.dataItem.id
+    });
     try {
       axios.defaults.headers["Content-Type"] = "application/json";
       axios.defaults.headers["accept"] = "application/javascript";
@@ -261,6 +242,7 @@ class App extends React.Component {
           {
             user_storage: {
               __KEY__: e.directory.dataItem.__KEY__,
+              id: e.directory.dataItem.id,
             },
           }
         )
@@ -286,9 +268,7 @@ class App extends React.Component {
         axios.defaults.headers["Project"] = localStorage.getItem("project_id");
         axios
           .post(`${process.env.REACT_APP_API_BASE_URL}/user_storages`, {
-            user_storage: {
-              json: folder,
-            },
+            user_storage: folder
           })
           .then((res) => {
             this.setState({
@@ -312,7 +292,7 @@ class App extends React.Component {
       updated = this.createFile(itemData.extension, fileSystemItem);
     }
     if (itemData.extension === "") {
-      updated = this.createFolder(itemData.extension, fileSystemItem);
+      updated = this.createFolder(itemData.extension, fileSystemItem, itemData);
     } else if (itemData.category !== undefined) {
       updated = this.updateCategory(
         itemData.category,
