@@ -10,7 +10,7 @@ const pagesWithoutAuthentication = [
     {id: "user_invitation", path: "/user_invitation/accept", component: UserInvitation}
 ];
 
-const role = localStorage.getItem("user");
+const role = localStorage.getItem("role");
 var pagesWithAuthentication = [...memberPages];
     if ( role === "site_owner" ){ pagesWithAuthentication = [...memberPages, ...siteOwnerPages]  }
     else if ( role === "project_admin" ){ pagesWithAuthentication = [...memberPages, ...projectAdminPages]  }
