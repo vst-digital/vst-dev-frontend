@@ -21,13 +21,7 @@ import {
   deleteUserStorage,
 } from "shared/services";
 import { convertBlobToBase64 } from "../../helpers/FileHelpers";
-
 class App extends React.Component {
-  fileManagerAttributes = {
-    id: "elementId",
-    class: "class-name",
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -62,6 +56,15 @@ class App extends React.Component {
       ],
       onItemClick: this.onItemClick.bind(this),
     };
+    this.backButton = {
+      items: [
+        { 
+          text: "Back",
+          icon: "arrowleft",
+        },
+      ],
+      onItemClick: this.onItemClick.bind(this),
+    };
 
     this.share = {
       items: [
@@ -82,9 +85,13 @@ class App extends React.Component {
     };
 
     this.state = {
-      itemViewMode: "thumbnails",
+      itemViewMode: "thumbnails"
     };
+    this.state = {
+      navigation: "thumbnails"
 
+    };
+    
 
     this.onFileUploaded = async (e) => {
       try {
@@ -100,7 +107,7 @@ class App extends React.Component {
           size: `${e.fileData.size}`,
           data: `${filedata}`
         };
-
+        console.log (newUpload)
         axios.defaults.headers["Content-Type"] = "application/json";
         axios.defaults.headers["accept"] = "application/json";
         axios.defaults.headers["Authorization"] = localStorage.getItem("token");
@@ -123,8 +130,40 @@ class App extends React.Component {
         console.log(e);
       }
     };
-  }
 
+    this.onItemDeleted = async (e) => {
+      try {
+        const deletedItem = e.item.dataItem.__KEY__
+        console.log(deletedItem)
+        axios.defaults.headers["Content-Type"] = "application/json";
+        axios.defaults.headers["accept"] = "application/json";
+        axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+        axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+        axios
+          .delete(
+            `${process.env.REACT_APP_API_BASE_URL}/user_storages/destroy`,
+            {
+               user_storage: deletedItem
+            }
+          )
+          .then((res) => {
+            this.setState({
+              fileItemsOne: res.data.data.map((item) => item.attributes),
+            });
+          })
+          .catch((error) => console.error(error));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  }
+    onOptionChanged(e) {
+        if (e.fullName === "itemView.mode") {
+          this.setState({
+            itemViewMode: e.value,
+          });
+        }
+      }
   componentWillMount = () => {
     try {
       axios.defaults.headers["Content-Type"] = "application/json";
@@ -216,15 +255,12 @@ class App extends React.Component {
     return true;
   }
 
-  onOptionChanged(e) {
-    if (e.fullName === "itemView.mode") {
-      this.setState({
-        itemViewMode: e.value,
-      });
-    }
-  }
+
+  
 
   onCurrentDirectoryChanged = async (e) => {
+    const currentDirectory = e.directory.dataItem.id
+    // this.backButtonClicked(currentDirectory)
     this.setState({
       currentPath: e.component.option("currentPath"),
     });
@@ -238,7 +274,7 @@ class App extends React.Component {
       axios.defaults.headers["Project"] = localStorage.getItem("project_id");
       axios
         .get(
-          `${process.env.REACT_APP_API_BASE_URL}/user_storages/${e.directory.dataItem.id}`,
+          `${process.env.REACT_APP_API_BASE_URL}/user_storages/${currentDirectory}`,
           {
             user_storage: {
               __KEY__: e.directory.dataItem.__KEY__,
@@ -256,6 +292,11 @@ class App extends React.Component {
       console.log(e);
     }
   };
+  
+  backButtonClicked( currentDirectory
+  ) {   
+    return true;
+  }
 
   onShareClick = (e) => {};
 
@@ -293,7 +334,13 @@ class App extends React.Component {
     }
     if (itemData.extension === "") {
       updated = this.createFolder(itemData.extension, fileSystemItem, itemData);
-    } else if (itemData.category !== undefined) {
+    } 
+    if (itemData.text === "Share") {
+    console.log(fileSystemItem)    } 
+    if (itemData.text === "Back") {
+    updated = this.backButtonClicked(this.onCurrentDirectoryChanged);
+  } 
+    else if (itemData.category !== undefined) {
       updated = this.updateCategory(
         itemData.category,
         fileSystemItem,
@@ -359,6 +406,7 @@ class App extends React.Component {
           elementAttr={this.fileManagerAttributes}
           onFileUploading={this.onFileUploading}
           onFileUploaded={this.onFileUploaded}
+          onItemDeleted={this.onItemDeleted}
           height={450}
         >
           <Upload chunkSize={500000} maxFileSize={1000000} />
@@ -366,13 +414,15 @@ class App extends React.Component {
             // create={true}
             // copy={true}
             // move={true}
-            // delete={true}
+            delete={true}
             // rename={true}
             upload={true}
             // download={true}
             // edit={true}
           ></Permissions>
-          <ItemView showParentFolder={false}>
+          <ItemView 
+          // mode={this.state.itemViewMode}
+          showParentFolder={true}>
             <Details>
               <Column dataField="thumbnail"></Column>
               <Column dataField="name"></Column>
@@ -387,6 +437,11 @@ class App extends React.Component {
               widget="dxMenu"
               location="before"
               options={this.newFileMenuOptions}
+            />
+            <Item
+              widget="dxMenu"
+              location="before"
+              options={this.backButton}
             />
             <Item name="upload" />
             <Item name="refresh" />
