@@ -27,14 +27,12 @@ const navList = [
     {
         id: "project_setting", label: "Project Setting", icon: SettingsApplications, subMenu: [
             { id: "groups", path: "/groups", label: 'Groups' },
-            { id: "roles", path: "/roles", label: 'Role' },
+            { id: "contacts", path: "/contacts", label: 'Members' },
             { id: "permissions", path: "/permissions", label: 'Permission' },
         ]
     },
     { id: "projectInformation", path: "/projectInformation", label: 'Project Information', icon: AccountTree },
-    { id: "contacts_id", path: "/contacts", label: 'Members', icon: ContactMail },
     { id: "calander", path: "/calander", label: 'Calander', icon: CalendarTodayIcon },
-    // { id: "documentManager", path: "/storages", label: 'File Manager', icon: Storage },
     { id: "library", path: "/library", label: 'Library', icon: MenuBookIcon },
     { id: "report", path: "/report", label: 'Report', icon: LibraryBooksIcon },
     

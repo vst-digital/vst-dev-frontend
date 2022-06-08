@@ -98,7 +98,7 @@ const SignIn = ({ history, props }) => {
     };
 
     const { values, touched, errors, handleSubmit, handleChange } = useFormik({
-        initialValues: { username: 'toro@gmail.com', password: '123123123' },
+        initialValues: { username: '', password: '' },
         validationSchema: SIGN_IN,
         onSubmit: onSubmit
     });

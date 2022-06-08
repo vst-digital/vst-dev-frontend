@@ -554,6 +554,7 @@ export const MemberSchema = {
         {name: 'role', header: 'Role', defaultFlex: 2},
         {name: 'email', header: 'Email', defaultFlex: 2},
         {name: 'contact', header: 'Contact', defaultFlex: 2},
+        {name: 'invited_by', header: 'Invited By?', defaultFlex: 2},
         {name: 'invitation_status', header: 'Invitation Accepted?', defaultFlex: 2,
                     render: ({value}) =>  value == true? "Yes" : "No"},
         {name: 'created_at', header: 'Created At', defaultFlex: 2, render: ({value}) => formatDateTime(value)},
