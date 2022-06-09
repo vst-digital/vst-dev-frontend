@@ -17,7 +17,6 @@ const authReducer = (state = initialState, action) => {
         case STOP_SPINNER:
             return {...state, loading: false};
         case AUTH_SUCCESS:
-            debugger
             return {...state, isAuthenticated: true, ...action.data};
         case AUTH_FAILURE:
         case AUTH_LOGOUT:
