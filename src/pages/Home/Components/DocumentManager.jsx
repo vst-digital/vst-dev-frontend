@@ -43,7 +43,7 @@ const DocumentManager = ({history}) => {
         <Grid container justifyContent="space-between">
           <Grid item>
             <Typography className={classes.title} variant="h3" color="textSecondary" gutterBottom >
-              Doc Manager
+             File Manager
             </Typography>
           </Grid>
           <Grid item>
@@ -53,7 +53,7 @@ const DocumentManager = ({history}) => {
           </Grid>
         </Grid>
         <div className={classes.difference}>
-          <Button variant="outlined" color="primary" size="large" onClick={() => history.push('/documentManager')}>Document Manager</Button>
+          <Button variant="outlined" color="primary" size="large" onClick={() => history.push('/storages')}>Document Manager</Button>
         </div>
       </CardContent>
     </Card>

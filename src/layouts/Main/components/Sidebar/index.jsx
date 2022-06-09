@@ -4,40 +4,19 @@ import { Collapse, colors, Drawer, List, ListItem, makeStyles, SvgIcon, Typograp
 import {
     ArrowDropDown,
     ArrowDropUp,
-    ContactMail,
-    Dashboard,
-    SettingsApplications,
-    Category,
-    AccountTree,
-    ChatBubble,
-    Storage,
+    Category, 
 } from "@material-ui/icons";
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import MenuBookIcon from '@material-ui/icons/MenuBook';
-
+import { adminList, siteOwnerList, memberList } from "./navLists"
 import cn from "classnames";
 import Scrollbar from "react-custom-scrollbars-2";
-
 import { computeHeight, getInitials } from "../../../../shared/utilities/common.util";
 
-const navList = [
-    { id: "home", path: "/home", label: 'Home', icon: Dashboard },
-    { id: "communications", path: "/communications", label: 'Communication', icon: ChatBubble },
-    {
-        id: "project_setting", label: "Project Setting", icon: SettingsApplications, subMenu: [
-            { id: "groups", path: "/groups", label: 'Groups' },
-            { id: "contacts", path: "/contacts", label: 'Members' },
-            { id: "permissions", path: "/permissions", label: 'Permission' },
-        ]
-    },
-    { id: "projectInformation", path: "/projectInformation", label: 'Project Information', icon: AccountTree },
-    { id: "calander", path: "/calander", label: 'Calander', icon: CalendarTodayIcon },
-    { id: "library", path: "/library", label: 'Library', icon: MenuBookIcon },
-    { id: "report", path: "/report", label: 'Report', icon: LibraryBooksIcon },
-    
-];
+var navList = [...memberList];
 
+const role = localStorage.getItem("role");
+ if ( role === "site_owner" ){ navList = [...memberList, ...siteOwnerList] }
+ else if ( role === "project_admin" ){ navList = [...memberList, ...adminList] }
+        
 const useStyles = makeStyles((theme) => ({
     flexGrow: { flexGrow: 1 },
     drawer: {
@@ -155,7 +134,7 @@ const Sidebar = ({ openSidebar }) => {
             [menuId]: !collapseState[menuId]
         });
     };
-
+            
     const getSidebarNav = (navList, isSubList = false, parentIndex = '') => {
         return (
             <List component="ul" disablePadding className={cn({ [classes.navList]: !isSubList })}>
