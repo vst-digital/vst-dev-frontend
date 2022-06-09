@@ -98,7 +98,7 @@ class App extends React.Component {
         let parent_id = ""
         parent_id = e.parentDirectory.dataItem?.id ? e.parentDirectory.dataItem.id : this.state.parentFolder
         parent_id = parent_id == undefined ? "" : parent_id;
-        const filedata = await convertBlobToBase64(e.fileData);
+        const filedata = await convertBlobToBase64(e?.fileData);
         const newUpload = {
           __KEY__: Date.now(),
           name: `${e.fileData.name}`,
@@ -107,7 +107,6 @@ class App extends React.Component {
           size: `${e.fileData.size}`,
           data: `${filedata}`
         };
-        console.log (newUpload)
         axios.defaults.headers["Content-Type"] = "application/json";
         axios.defaults.headers["accept"] = "application/json";
         axios.defaults.headers["Authorization"] = localStorage.getItem("token");
@@ -122,19 +121,17 @@ class App extends React.Component {
           )
           .then((res) => {
             this.setState({
-              fileItemsOne: res.data.data.map((item) => item.attributes),
+              fileItemsOne: res.data.data.map((item) => item?.attributes),
             });
           })
           .catch((error) => console.error(error));
       } catch (e) {
-        console.log(e);
       }
     };
 
     this.onItemDeleted = async (e) => {
       try {
-        const deletedItem = e.item.dataItem.__KEY__
-        console.log(deletedItem)
+        const deletedItem = e.item.dataItem?.__KEY__
         axios.defaults.headers["Content-Type"] = "application/json";
         axios.defaults.headers["accept"] = "application/json";
         axios.defaults.headers["Authorization"] = localStorage.getItem("token");
@@ -148,19 +145,18 @@ class App extends React.Component {
           )
           .then((res) => {
             this.setState({
-              fileItemsOne: res.data.data.map((item) => item.attributes),
+              fileItemsOne: res.data.data.map((item) => item?.attributes),
             });
           })
           .catch((error) => console.error(error));
       } catch (e) {
-        console.log(e);
       }
     };
   }
     onOptionChanged(e) {
-        if (e.fullName === "itemView.mode") {
+        if (e?.fullName === "itemView.mode") {
           this.setState({
-            itemViewMode: e.value,
+            itemViewMode: e?.value,
           });
         }
       }
@@ -174,12 +170,11 @@ class App extends React.Component {
         .get(`${process.env.REACT_APP_API_BASE_URL}/user_storages`, {})
         .then((res) => {
           this.setState({
-            fileItemsOne: res.data.data.map((item) => item.attributes),
+            fileItemsOne: res.data.data.map((item) => item?.attributes),
           });
         })
         .catch((error) => console.error(error));
     } catch (e) {
-      console.log(e);
     }
   };
 
@@ -194,11 +189,10 @@ class App extends React.Component {
       __KEY__: Date.now(),
       name: `${response}${fileExtension}`,
       isDirectory: false,
-      parent_id: `${directory.key}`,
+      parent_id: `${directory?.key}`,
       size: 0,
     };
 
-    console.log(newFile); //  create new file data is stored here
 
     if (!directory.isDirectory) {
       return false;
@@ -235,7 +229,6 @@ class App extends React.Component {
 
     const storageFolder = new StorageFolder(newFolder);
     this._onFolderCreate(storageFolder);
-    console.log(newFolder); // new folder data is stored here
 
     if (!directory.isDirectory) {
       return false;
@@ -259,8 +252,7 @@ class App extends React.Component {
   
 
   onCurrentDirectoryChanged = async (e) => {
-    const currentDirectory = e.directory.dataItem.id
-    // this.backButtonClicked(currentDirectory)
+    const currentDirectory = e?.directory?.dataItem?.id
     this.setState({
       currentPath: e.component.option("currentPath"),
     });
@@ -284,12 +276,11 @@ class App extends React.Component {
         )
         .then((res) => {
           this.setState({
-            fileItemsOne: res.data.data.map((item) => item.attributes),
+            fileItemsOne: res.data.data.map((item) => item?.attributes),
           });
         })
         .catch((error) => console.error(error));
     } catch (e) {
-      console.log(e);
     }
   };
   
@@ -313,12 +304,11 @@ class App extends React.Component {
           })
           .then((res) => {
             this.setState({
-              fileItemsOne: res.data.data.map((item) => item.attributes),
+              fileItemsOne: res.data.data.map((item) => item?.attributes),
             });
           })
           .catch((error) => console.error(error));
       } catch (e) {
-        console.log(e);
       }
     }
   };
@@ -329,18 +319,18 @@ class App extends React.Component {
 
   onItemClick({ itemData, viewArea, fileSystemItem }) {
     let updated = false;
-    if (itemData.extension) {
+    if (itemData?.extension) {
       updated = this.createFile(itemData.extension, fileSystemItem);
     }
-    if (itemData.extension === "") {
+    if (itemData?.extension === "") {
       updated = this.createFolder(itemData.extension, fileSystemItem, itemData);
     } 
-    if (itemData.text === "Share") {
-    console.log(fileSystemItem)    } 
-    if (itemData.text === "Back") {
+    if (itemData?.text === "Share") {
+  } 
+    if (itemData?.text === "Back") {
     updated = this.backButtonClicked(this.onCurrentDirectoryChanged);
   } 
-    else if (itemData.category !== undefined) {
+    else if (itemData?.category !== undefined) {
       updated = this.updateCategory(
         itemData.category,
         fileSystemItem,
@@ -350,7 +340,6 @@ class App extends React.Component {
 
     if (updated) {
       this.fileManager.refresh();
-      // console.log(itemData)
     }
   }
 
@@ -364,7 +353,7 @@ class App extends React.Component {
     }
 
     items.forEach((item) => {
-      if (item.dataItem) {
+      if (item?.dataItem) {
         item.dataItem.category = newCategory;
       }
     });
