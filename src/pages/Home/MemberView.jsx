@@ -8,9 +8,6 @@ import Library from "./Components/Library";
 import ChatModule from './Components/ChatModule'
 
 const MemberView = ({ history, location }) => {
-    const user = localStorage.getItem("user");
-
-    const project_id = localStorage.getItem('project_id');
         return (
 
             <Container>
