@@ -63,33 +63,16 @@ class App extends React.Component {
       onItemClick: this.onItemClick.bind(this),
     };
 
-    this.share = {
-      items: [
-        {
-          text: "Share",
-          icon: "share",
-          items: [
-            {
-              text: "Member",
-            },
-            {
-              text: "Group",
-            },
-          ],
-        },
-      ],
-      onShareClick: this.onShareClick.bind(this),
-    };
-
     this.state = {
       itemViewMode: "thumbnails",
     };
 
-
     this.onFileUploaded = async (e) => {
       try {
-        let parent_id = ""
-        parent_id = e.parentDirectory.dataItem?.id ? e.parentDirectory.dataItem.id : this.state.parentFolder
+        let parent_id = "";
+        parent_id = e.parentDirectory.dataItem?.id
+          ? e.parentDirectory.dataItem.id
+          : this.state.parentFolder;
         parent_id = parent_id == undefined ? "" : parent_id;
         const filedata = await convertBlobToBase64(e.fileData);
         const newUpload = {
@@ -98,7 +81,7 @@ class App extends React.Component {
           isDirectory: false,
           parent_id: `${parent_id}`,
           size: `${e.fileData.size}`,
-          data: `${filedata}`
+          data: `${filedata}`,
         };
 
         axios.defaults.headers["Content-Type"] = "application/json";
@@ -110,7 +93,7 @@ class App extends React.Component {
             `${process.env.REACT_APP_API_BASE_URL}/user_storages/attach_file`,
             {
               user_storage: newUpload,
-              id: parent_id
+              id: parent_id,
             }
           )
           .then((res) => {
@@ -182,7 +165,7 @@ class App extends React.Component {
   createFolder(
     fileExtension,
     directory = this.fileManager.getCurrentDirectory(),
-    itemData,
+    itemData
   ) {
     const response = prompt("Folder Name");
     if (response === "") return;
@@ -190,7 +173,9 @@ class App extends React.Component {
       __KEY__: Date.now(),
       name: `${response}`,
       isDirectory: true,
-      parent_id: `${this.state.parentFolder == undefined ? "" : this.state.parentFolder}`, // TODO: IT is blank for some reason
+      parent_id: `${
+        this.state.parentFolder == undefined ? "" : this.state.parentFolder
+      }`, // TODO: IT is blank for some reason
       size: 0,
     };
 
@@ -229,7 +214,7 @@ class App extends React.Component {
       currentPath: e.component.option("currentPath"),
     });
     this.setState({
-      parentFolder: e.directory.dataItem.id
+      parentFolder: e.directory.dataItem.id,
     });
     try {
       axios.defaults.headers["Content-Type"] = "application/json";
@@ -268,7 +253,7 @@ class App extends React.Component {
         axios.defaults.headers["Project"] = localStorage.getItem("project_id");
         axios
           .post(`${process.env.REACT_APP_API_BASE_URL}/user_storages`, {
-            user_storage: folder
+            user_storage: folder,
           })
           .then((res) => {
             this.setState({
@@ -347,6 +332,24 @@ class App extends React.Component {
   }
 
   render() {
+    const contextMenuOptions = {
+      items: [
+        {
+          text: "Share",
+          icon: "share",
+          items: [
+            {
+              text: "Member",
+            },
+            {
+              text: "Group",
+            },
+          ],
+        },
+      ],
+      onShareClick: this.onShareClick.bind(this),
+    };
+
     return (
       <>
         <FileManager
@@ -361,66 +364,78 @@ class App extends React.Component {
           onFileUploaded={this.onFileUploaded}
           height={450}
         >
-          <Upload chunkSize={500000} maxFileSize={1000000} />
           <Permissions
-            // create={true}
-            // copy={true}
-            // move={true}
-            // delete={true}
-            // rename={true}
-            upload={true}
-            // download={true}
-            // edit={true}
+            create={true}
+            delete={true}
+            rename={true}
+            download={true}
           ></Permissions>
           <ItemView showParentFolder={false}>
             <Details>
               <Column dataField="thumbnail"></Column>
               <Column dataField="name"></Column>
+              <Column
+                dataField="category"
+                caption="Category"
+                width="95"
+              ></Column>
               <Column dataField="dateModified"></Column>
               <Column dataField="size"></Column>
             </Details>
           </ItemView>
+
+          {/* Responsible for passing configs to context menu options */}
           <Toolbar>
             <Item name="showNavPane" visible="true" />
             <Item name="separator" />
+            <Item name="create" />
             <Item
               widget="dxMenu"
               location="before"
               options={this.newFileMenuOptions}
             />
-            <Item name="upload" />
             <Item name="refresh" />
             <Item name="separator" location="after" />
             <Item name="switchView" />
 
             <FileSelectionItem name="rename" />
             <FileSelectionItem name="separator" />
-            <FileSelectionItem name="copy" />
-            <FileSelectionItem name="separator" />
-            <FileSelectionItem name="move" />
-            <FileSelectionItem name="separator" />
-            <FileSelectionItem name="download" />
-            <FileSelectionItem name="separator" />
-            <FileSelectionItem
-              widget="dxMenu"
-              location="before"
-              options={this.share}
-            />
+            <FileSelectionItem name="delete" />
             <FileSelectionItem name="separator" />
             <FileSelectionItem name="delete" />
             <FileSelectionItem name="separator" />
+            <Item name="share" />
+            <FileSelectionItem
+              widget="dxMenu"
+              location="before"
+              options={contextMenuOptions}
+            />
+            <FileSelectionItem name="refresh" />
             <FileSelectionItem name="clearSelection" />
           </Toolbar>
+
+          {/* Responsible for visual representation of context menu items like, order, sub items etc.  */}
           <ContextMenu>
+            <Item name="create" />
+            <Item text="Create new file" icon="plus">
+              <Item text="Text Document" extension=".txt" />
+              <Item text="RTF Document" extension=".rtf" />
+              <Item text="Spreadsheet" extension=".xls" />
+            </Item>
             <Item name="rename" beginGroup="true" />
-            <Item name="copy" />
-            <Item name="move" />
             <Item name="delete" />
             <Item text="Share" icon="share" beginGroup="true">
               <Item text="Member" />
               <Item text="Group" />
             </Item>
-            <Item name="download" />
+            <Item name="download" text="Download a File" />
+            <Item text="Category" icon="tags" beginGroup="true">
+              <Item text="Work" category="Work" />
+              <Item text="Important" category="Important" />
+              <Item text="Home" category="Home" />
+              <Item text="None" category="" />
+            </Item>
+            <Item name="refresh" />
           </ContextMenu>
         </FileManager>
       </>
