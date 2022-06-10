@@ -347,98 +347,94 @@ class App extends React.Component {
           ],
         },
       ],
-      onShareClick: this.onShareClick.bind(this),
+      onItemClick: this.onShareClick.bind(this),
     };
 
     return (
-      <>
-        <FileManager
-          ref={this.fileManagerRef}
-          fileSystemProvider={this.state.fileItemsOne}
-          onContextMenuItemClick={this.onItemClick}
-          onOptionChanged={this.onOptionChanged}
-          customizeThumbnail={this.customizeIcon}
-          onCurrentDirectoryChanged={this.onCurrentDirectoryChanged}
-          elementAttr={this.fileManagerAttributes}
-          onFileUploading={this.onFileUploading}
-          onFileUploaded={this.onFileUploaded}
-          height={450}
-        >
-          <Permissions
-            create={true}
-            delete={true}
-            rename={true}
-            download={true}
-          ></Permissions>
-          <ItemView showParentFolder={false}>
-            <Details>
-              <Column dataField="thumbnail"></Column>
-              <Column dataField="name"></Column>
-              <Column
-                dataField="category"
-                caption="Category"
-                width="95"
-              ></Column>
-              <Column dataField="dateModified"></Column>
-              <Column dataField="size"></Column>
-            </Details>
-          </ItemView>
+      <FileManager
+        ref={this.fileManagerRef}
+        fileSystemProvider={this.state.fileItemsOne}
+        onContextMenuItemClick={this.onItemClick}
+        onOptionChanged={this.onOptionChanged}
+        customizeThumbnail={this.customizeIcon}
+        onCurrentDirectoryChanged={this.onCurrentDirectoryChanged}
+        elementAttr={this.fileManagerAttributes}
+        onFileUploading={this.onFileUploading}
+        onFileUploaded={this.onFileUploaded}
+        height={450}
+      >
+        <Permissions
+          create={true}
+          delete={true}
+          rename={true}
+          download={true}
+        ></Permissions>
 
-          {/* Responsible for passing configs to context menu options */}
-          <Toolbar>
-            <Item name="showNavPane" visible="true" />
-            <Item name="separator" />
-            <Item name="create" />
-            <Item
-              widget="dxMenu"
-              location="before"
-              options={this.newFileMenuOptions}
-            />
-            <Item name="refresh" />
-            <Item name="separator" location="after" />
-            <Item name="switchView" />
+        {/* Columns to show */}
+        <ItemView showParentFolder={false}>
+          <Details>
+            <Column dataField="thumbnail"></Column>
+            <Column dataField="name"></Column>
+            <Column dataField="category" caption="Category" width="95"></Column>
+            <Column dataField="dateModified"></Column>
+            <Column dataField="size"></Column>
+          </Details>
+        </ItemView>
 
-            <FileSelectionItem name="rename" />
-            <FileSelectionItem name="separator" />
-            <FileSelectionItem name="delete" />
-            <FileSelectionItem name="separator" />
-            <FileSelectionItem name="delete" />
-            <FileSelectionItem name="separator" />
-            <Item name="share" />
-            <FileSelectionItem
-              widget="dxMenu"
-              location="before"
-              options={contextMenuOptions}
-            />
-            <FileSelectionItem name="refresh" />
-            <FileSelectionItem name="clearSelection" />
-          </Toolbar>
+        {/* Responsible for passing configs to context menu options */}
+        <Toolbar>
+          <Item name="showNavPane" visible="true" />
+          <Item name="separator" />
+          <Item name="create" />
+          <Item
+            widget="dxMenu"
+            location="before"
+            options={this.newFileMenuOptions}
+          />
+          <Item name="refresh" />
+          <Item name="separator" location="after" />
+          <Item name="switchView" />
 
-          {/* Responsible for visual representation of context menu items like, order, sub items etc.  */}
-          <ContextMenu>
-            <Item name="create" />
-            <Item text="Create new file" icon="plus">
-              <Item text="Text Document" extension=".txt" />
-              <Item text="RTF Document" extension=".rtf" />
-              <Item text="Spreadsheet" extension=".xls" />
-            </Item>
-            <Item name="rename" beginGroup="true" />
-            <Item name="delete" />
-            <Item text="Share" icon="share" beginGroup="true">
-              <Item text="Member" />
-              <Item text="Group" />
-            </Item>
-            <Item name="download" text="Download a File" />
-            <Item text="Category" icon="tags" beginGroup="true">
-              <Item text="Work" category="Work" />
-              <Item text="Important" category="Important" />
-              <Item text="Home" category="Home" />
-              <Item text="None" category="" />
-            </Item>
-            <Item name="refresh" />
-          </ContextMenu>
-        </FileManager>
-      </>
+          <FileSelectionItem name="rename" />
+          <FileSelectionItem name="separator" />
+          <FileSelectionItem name="delete" />
+          <FileSelectionItem name="separator" />
+          <FileSelectionItem name="download" />
+          <FileSelectionItem name="separator" />
+          <Item name="share" />
+          <FileSelectionItem
+            widget="dxMenu"
+            location="before"
+            options={contextMenuOptions}
+          />
+          <FileSelectionItem name="refresh" />
+          <FileSelectionItem name="clearSelection" />
+        </Toolbar>
+
+        {/* Responsible for visual representation of context menu items like, order, sub items etc.  */}
+        <ContextMenu>
+          <Item name="create" />
+          <Item text="Create new file" icon="plus">
+            <Item text="Text Document" extension=".txt" />
+            <Item text="RTF Document" extension=".rtf" />
+            <Item text="Spreadsheet" extension=".xls" />
+          </Item>
+          <Item name="rename" beginGroup="true" />
+          <Item name="delete" />
+          <Item text="Share" icon="share" beginGroup="true">
+            <Item text="Member" />
+            <Item text="Group" />
+          </Item>
+          <Item name="download" text="Download a File" />
+          <Item text="Category" icon="tags" beginGroup="true">
+            <Item text="Work" category="Work" />
+            <Item text="Important" category="Important" />
+            <Item text="Home" category="Home" />
+            <Item text="None" category="" />
+          </Item>
+          <Item name="refresh" />
+        </ContextMenu>
+      </FileManager>
     );
   }
 }
