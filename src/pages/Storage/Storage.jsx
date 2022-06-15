@@ -7,7 +7,7 @@ import FileManager, {
   Item,
   ItemView,
   Permissions,
-  Toolbar
+  Toolbar,
 } from "devextreme-react/file-manager";
 import React from "react";
 import { StorageFolder } from "shared/models";
@@ -359,6 +359,7 @@ class App extends React.Component {
           delete={true}
           rename={true}
           download={true}
+          upload={true}
         ></Permissions>
 
         {/* Columns to show */}
@@ -390,6 +391,8 @@ class App extends React.Component {
           <FileSelectionItem name="separator" />
           <FileSelectionItem name="delete" />
           <FileSelectionItem name="separator" />
+          <FileSelectionItem name="upload" />
+          <FileSelectionItem name="separator" />
           <FileSelectionItem name="download" />
           <FileSelectionItem name="separator" />
           <Item name="share" />
@@ -411,6 +414,7 @@ class App extends React.Component {
             <Item text="Spreadsheet" extension=".xls" />
           </Item>
           <Item name="rename" beginGroup="true" />
+          <Item name="upload" />
           <Item name="delete" />
           <Item text="Share" icon="share" beginGroup="true">
             <Item text="Member" />
