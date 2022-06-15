@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Button,
   Dialog,
@@ -6,41 +5,35 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Typography,
   Grid,
 } from "@material-ui/core";
-import { TextField, AsyncSelect } from "components";
+import { AsyncSelect } from "components";
 import { useFormik } from "formik";
-import { Project_Validation } from "shared/utilities/validationSchema.util";
+import { useHttp } from "hooks";
+import * as React from "react";
 import { Project } from "shared/models";
 import { getProjects } from "shared/services";
-import { useHttp } from "hooks";
-import { useState } from "react";
 import {
-  errorMessage,
   getProjectLabel,
-  getFullName,
-  getNumberRoundToOneDecimal,
-  getOptionLabel,
   getSelectDataSource,
-  hasError,
 } from "shared/utilities/common.util";
+import { Project_Validation } from "shared/utilities/validationSchema.util";
 
-const SelectProject = ({ onOpen, onClose, history, location }) => {
+const SelectProject = ({ history }) => {
   const [open, setOpen] = React.useState(true);
   const project = new Project();
   const { notify, requestHandler } = useHttp();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     if (values?.id) {
       setOpen(false);
     } else {
-      //   <Alert severity="error">You must select a project to proceed!</Alert>;
-      alert("You must select a project to proceed!");
+      notify({
+        originVertical: "top",
+        originHorizontal: "center",
+        msg: "You must select a project to proceed!",
+        type: "error",
+      });
     }
   };
 
@@ -64,15 +57,7 @@ const SelectProject = ({ onOpen, onClose, history, location }) => {
     setValues(project);
   };
 
-  const {
-    values,
-    touched,
-    errors,
-    handleChange,
-    handleSubmit,
-    setValues,
-    setFieldError,
-  } = useFormik({
+  const { values, handleSubmit, setValues } = useFormik({
     initialValues: project,
     validationSchema: Project_Validation,
     onSubmit: onConfirm,

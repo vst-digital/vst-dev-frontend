@@ -1,26 +1,18 @@
-import React from "react";
-import { useState, useEffect, useHttp } from "react";
-import FileManager, {
-  Permissions,
-  Toolbar,
-  ContextMenu,
-  Item,
-  FileSelectionItem,
-  ItemView,
-  Details,
-  Column,
-  Upload,
-} from "devextreme-react/file-manager";
-import { fileItems } from "./data.js";
-import { StorageFolder } from "shared/models";
 import axios from "axios";
-import {
-  getUserStorages,
-  postUserStorage,
-  putUserStorage,
-  deleteUserStorage,
-} from "shared/services";
+import FileManager, {
+  Column,
+  ContextMenu,
+  Details,
+  FileSelectionItem,
+  Item,
+  ItemView,
+  Permissions,
+  Toolbar
+} from "devextreme-react/file-manager";
+import React from "react";
+import { StorageFolder } from "shared/models";
 import { convertBlobToBase64 } from "../../helpers/FileHelpers";
+import { fileItems } from "./data.js";
 
 class App extends React.Component {
   fileManagerAttributes = {
@@ -41,7 +33,6 @@ class App extends React.Component {
     this.updateCategory = this.updateCategory.bind(this);
     this.onOptionChanged = this.onOptionChanged.bind(this);
     this._onFolderCreate = this._onFolderCreate.bind(this);
-    const storageFolder = new StorageFolder();
 
     this.newFileMenuOptions = {
       items: [
@@ -242,7 +233,7 @@ class App extends React.Component {
     }
   };
 
-  onShareClick = (e) => {};
+  onShareClick = () => {};
 
   _onFolderCreate = async (folder) => {
     if (folder) {
