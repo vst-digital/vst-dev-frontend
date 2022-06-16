@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import 'react-form-builder2/dist/app.css';
 import "../Components/SideBar/styes/CommunicationBase.scss"
-
 import { useHttp } from "hooks";
 import { AsyncSelect, Container, Panel, TextField } from "components";
 import { Memo } from "shared/models";
