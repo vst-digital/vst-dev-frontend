@@ -94,7 +94,7 @@ class Storage extends React.Component {
         axios.defaults.headers["Authorization"] = localStorage.getItem("token");
         axios.defaults.headers["Project"] = localStorage.getItem("project_id");
         axios
-          .post(`${process.env.REACT_APP_API_BASE_URL}/ `, {
+          .post(`${process.env.REACT_APP_API_BASE_URL}/user_storages `, {
             user_storage: folder,
           })
           .then((res) => {
@@ -108,8 +108,9 @@ class Storage extends React.Component {
       }
     };
 
-    this.share = (file) => {
-      const shareWith = 4;
+    this.share = (e) => {
+      const file = e?.dataItem?.id;
+      const shareWith = 4; //TODO: shareWith is the ID of the user you want to share with (must come from select box)
       try {
         axios.defaults.headers["Content-Type"] = "application/json";
         axios.defaults.headers["accept"] = "application/json";
@@ -160,7 +161,7 @@ class Storage extends React.Component {
   };
 
   delete = ({ item }) => {
-    const id = item?.dataItem?.id;
+    const id = item?.dataItem?.items[0]?.id;
     // TODO: move all these configs to axios service
     try {
       axios.defaults.headers["Content-Type"] = "application/json";
@@ -179,7 +180,6 @@ class Storage extends React.Component {
       console.log(e);
     }
   };
-
   componentDidMount = () => {
     this.fetchFiles();
   };
@@ -251,7 +251,7 @@ class Storage extends React.Component {
   onItemClick({ itemData, viewArea, fileSystemItem }) {
     let updated = false;
     if (itemData.text === "Share") {
-      updated = this.share(fileSystemItem?.dataItem?.id);
+      updated = this.share(fileSystemItem);
     }
     if (updated) {
       this.fileManager.refresh();
@@ -375,7 +375,6 @@ class Storage extends React.Component {
             <Item name="refresh" />
           </ContextMenu>
         </FileManager>
-        <div>{/* <CreateMemberMemo /> */}</div>
       </>
     );
   }
