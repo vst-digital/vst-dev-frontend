@@ -1,63 +1,36 @@
-import { Avatar, Card, CardContent, Grid, makeStyles, Typography, Button } from '@material-ui/core';
-import { ChatBubble } from '@material-ui/icons';
+import { Avatar, makeStyles } from "@material-ui/core";
+import { ChatBubble } from "@material-ui/icons";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    height: '100%',
-    boxShadow: theme.shadows[2]
+import CardComp from "./common/CardComp";
+
+const useStyles = makeStyles((theme) => ({
+  icon: {
+    height: 32,
+    width: 32,
   },
-  content: {
-    alignItems: 'center',
-    display: 'flex'
-  },
-  title: { fontWeight: 700 },
   avatar: {
     backgroundColor: theme.palette.error.main,
     height: 56,
-    width: 56
+    width: 56,
   },
-  icon: {
-    height: 32,
-    width: 32
-  },
-  difference: {
-    marginTop: theme.spacing(2),
-    display: 'flex',
-    alignItems: 'center'
-  },
-  differenceIcon: {
-    color: theme.palette.error.dark
-  },
-  differenceValue: {
-    color: theme.palette.error.dark,
-    marginRight: theme.spacing(1)
-  }
 }));
 
-const Communication = ({history}) => {
+const Communication = () => {
   const classes = useStyles();
 
-  return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Grid container justifyContent="space-between">
-          <Grid item>
-            <Typography className={classes.title} variant="h3" color="textSecondary" gutterBottom >
-              Communication
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Avatar className={classes.avatar}>
-              <ChatBubble className={classes.icon} />
-            </Avatar>
-          </Grid>
-        </Grid>
-        <div className={classes.difference}>
-          <Button variant="outlined" color="primary" size="large" onClick={() => history.push('/communications')}>Communication</Button>
-        </div>
-      </CardContent>
-    </Card>
+  const IconComp = () => (
+    <Avatar className={classes?.avatar}>
+      <ChatBubble className={classes.icon} />
+    </Avatar>
   );
+
+  const cardProps = {
+    title: "Communication",
+    path: "/communications",
+    IconComp,
+  };
+
+  return <CardComp {...cardProps} />;
 };
 
 export default Communication;
