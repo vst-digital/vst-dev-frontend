@@ -1,5 +1,6 @@
-import { Box, styled } from "@mui/system";
 import React, { useState } from "react";
+import { useFormik } from "formik";
+import { Box, styled } from "@mui/system";
 import {
   Dialog,
   IconButton,
@@ -8,9 +9,18 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { addNewEvent, updateEvent, deleteEvent } from "../../shared/services/calendar.service";
 import { DateTimePicker } from "@material-ui/pickers";
+import { AsyncSelect } from "components";
+import {
+  addNewEvent,
+  updateEvent,
+  deleteEvent,
+} from "../../shared/services/calendar.service";
+import { Calendar_Validation } from "shared/utilities/validationSchema.util";
+import { Calendar } from "shared/models";
+import { useHttp } from "hooks";
+import { getSelectDataSource } from "shared/utilities/common.util";
+import { getAllMembersList } from "shared/services";
 
 const DialogFooter = styled(Box)(() => ({
   display: "flex",
@@ -23,60 +33,84 @@ const DialogHeader = styled(DialogFooter)(() => ({
 }));
 
 const EventEditorDialog = ({ event = {}, open, handleClose }) => {
-  const [state, setState] = useState(event);
+  const [calendarEvent, setCalendarEvent] = useState(event);
+  const { notify, requestHandler } = useHttp();
+
+  const onReceiverChange = (receiver_instance) => {
+    if (receiver_instance) {
+    } else {
+    }
+  };
+
+  const getReceiverList = () =>
+    new Promise((resolve, reject) => {
+      const params = { per_page: 500, page_no: 1, sort: "created_at.desc" };
+      getSelectDataSource(requestHandler, getAllMembersList(params))
+        .then((res) => resolve(res.data))
+        .catch((error) => reject(error));
+    });
   const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.value });
+    setCalendarEvent({
+      ...calendarEvent,
+      [event?.target?.name]: event?.target?.value,
+    });
   };
 
   const handleFormSubmit = () => {
-    let { id } = state;
+    let { id } = calendarEvent;
     if (id) {
       updateEvent({
-        ...state,
+        ...calendarEvent,
       }).then(() => {
         handleClose();
       });
     } else {
       addNewEvent({
         id: generateRandomId(),
-        ...state,
+        ...calendarEvent,
       }).then(() => {
         handleClose();
       });
     }
   };
+
   const handleDeleteEvent = () => {
-    if (state.id) {
-      deleteEvent(state).then(() => {
+    if (calendarEvent?.id) {
+      deleteEvent(calendarEvent).then(() => {
         handleClose();
       });
     }
   };
   const handleDateChange = (date, name) => {
-    setState({
-      ...state,
+    setCalendarEvent({
+      ...calendarEvent,
       [name]: date,
     });
   };
   const generateRandomId = () => {
     let tempId = Math.random().toString();
-    let id = tempId.substr(2, tempId.length - 1);
+    let id = tempId?.substr(2, tempId.length - 1);
     return id;
   };
-  let { title, location, note } = state;
+  let { title, location, note } = calendarEvent;
 
+  const { values, touched, errors, handleSubmit } = useFormik({
+    initialValues: Calendar,
+    validationSchema: Calendar_Validation,
+    onSubmit: handleFormSubmit,
+  });
   return (
-    <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth={true}>
-      <DialogHeader>
-        <h1> Add Events</h1>
-        <IconButton onClick={handleClose}>
-          <Icon sx={{ color: "#fff" }}>clear</Icon>
-        </IconButton>
-      </DialogHeader>
+    <form onSubmit={handleSubmit}>
+      <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth={true}>
+        <DialogHeader>
+          <h1> Add Event</h1>
+          <IconButton onClick={handleClose}>
+            <Icon sx={{ color: "#fff" }}>clear</Icon>
+          </IconButton>
+        </DialogHeader>
 
-      <Box p={2}>
-        <ValidatorForm onSubmit={handleFormSubmit}>
-          <TextValidator
+        <Box p={2}>
+          <TextField
             label="Title"
             type="text"
             name="title"
@@ -88,17 +122,15 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
           />
           <Grid container spacing={4}>
             <Grid item sm={6} xs={12}>
- 
               <DateTimePicker
                 onChange={(date) => handleDateChange(date, "start")}
                 renderInput={(props) => (
                   <TextField {...props} label="Start date" variant="standard" />
                 )}
               />
-              
             </Grid>
             <Grid item sm={6} xs={12}>
-              <DateTimePicker           
+              <DateTimePicker
                 onChange={(date) => handleDateChange(date, "end")}
                 renderInput={(props) => (
                   <TextField {...props} label="End date" variant="standard" />
@@ -107,7 +139,7 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
             </Grid>
           </Grid>
           <Box py={1.3} />
-          <TextValidator
+          <TextField
             label="Location"
             onChange={handleChange}
             type="text"
@@ -118,18 +150,29 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
             style={{ width: "100%", marginBottom: "24px" }}
           />
 
-          <TextValidator
-            label="Note"
+          <TextField
+            label="Subject"
             onChange={handleChange}
             type="text"
-            name="note"
+            name="subject"
             value={note || ""}
             multiline={true}
             validators={["required"]}
             errorMessages={["this field is required"]}
             style={{ width: "100%", marginBottom: "24px" }}
           />
-
+          <AsyncSelect
+            id={"receiver_id"}
+            label="Members"
+            getOptionLabel={(getMemberLabel) => getMemberLabel?.email || ""}
+            loadingMethod={getReceiverList}
+            value={values.receiver_id}
+            onChange={onReceiverChange}
+            error={touched.receiver_id && Boolean(errors.receiver_id)}
+            helperText={touched.receiver_id && errors.receiver_id}
+            multiple
+            style={{ width: "100%", marginBottom: "24px" }}
+          />
           <DialogFooter>
             <Button variant="contained" color="primary">
               Save
@@ -139,9 +182,9 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
               Delete
             </Button>
           </DialogFooter>
-        </ValidatorForm>
-      </Box>
-    </Dialog>
+        </Box>
+      </Dialog>
+    </form>
   );
 };
 

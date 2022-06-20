@@ -2,7 +2,7 @@ import React from "react";
 import { styled, Box } from "@mui/system";
 import { Tooltip, IconButton, Icon } from "@mui/material";
 import { navigate } from "react-big-calendar/lib/utils/constants";
-
+import { viewNameListObject } from "./data/calendarData";
 const CalenderHeader = styled("div")(() => ({
   display: "flex",
   padding: "4px 0px",
@@ -10,29 +10,6 @@ const CalenderHeader = styled("div")(() => ({
   borderTopRightRadius: 6,
   borderTopLeftRadius: 6,
 }));
-
-const viewNameListObject = {
-  month: {
-    name: "Month",
-    icon: "view_module",
-  },
-  week: {
-    name: "Week",
-    icon: "view_week",
-  },
-  work_week: {
-    name: "Work week",
-    icon: "view_array",
-  },
-  day: {
-    name: "Day",
-    icon: "view_day",
-  },
-  agenda: {
-    name: "Agenda",
-    icon: "view_agenda",
-  },
-};
 
 const CalendarHeader = (props) => {
   const {
@@ -43,25 +20,23 @@ const CalendarHeader = (props) => {
     onNavigate,
   } = props;
 
-    const renderViewButtons = () => {
-      if (viewNameList.length > 1) {
-        return viewNameList.map((view) => (
-          <IconButton
-            key={view}
-            size="large"
-            aria-label={view}
-            onClick={() => onView(view)}
-            disabled={currentView === view}
-          >
-            <Tooltip title={viewNameListObject[view].name}>
-              <Icon sx={{ color: "gray" }}>
-                {viewNameListObject[view].icon}
-              </Icon>
-            </Tooltip>
-          </IconButton>
-        ));
-      }
-    };
+  const renderViewButtons = () => {
+    if (viewNameList?.length > 1) {
+      return viewNameList?.map((view) => (
+        <IconButton
+          key={view}
+          size="large"
+          aria-label={view}
+          onClick={() => onView(view)}
+          disabled={currentView === view}
+        >
+          <Tooltip title={viewNameListObject[view]?.name}>
+            <Icon sx={{ color: "gray" }}>{viewNameListObject[view]?.icon}</Icon>
+          </Tooltip>
+        </IconButton>
+      ));
+    }
+  };
   return (
     <CalenderHeader>
       <Box display="flex" justifyContent="center">

@@ -19,6 +19,7 @@ const Container = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     margin: "16px",
   },
+  background: "white",
 }));
 
 const CalendarRoot = styled("div")(({ theme }) => ({
@@ -29,7 +30,7 @@ const CalendarRoot = styled("div")(({ theme }) => ({
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
-let viewList = Object.keys(Views).map((key) => Views[key]);
+let viewList = Object.keys(Views)?.map((key) => Views[key]);
 
 const EventCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -42,8 +43,8 @@ const EventCalendar = () => {
       .then((events) => {
         events = events?.map((e) => ({
           ...e,
-          start: new Date(e.start),
-          end: new Date(e.end),
+          start: new Date(e?.start),
+          end: new Date(e?.end),
         }));
         setEvents(events);
       });
@@ -76,7 +77,7 @@ const EventCalendar = () => {
     updateCalendar();
   }, []);
   return (
-    <Container>
+    <>
       <Button
         sx={{ mb: 2 }}
         variant="contained"
@@ -91,49 +92,51 @@ const EventCalendar = () => {
       >
         Add Event
       </Button>
-      {shouldShowEventDialog && (
-        <EventEditorDialog
-          handleClose={handleDialogClose}
-          open={shouldShowEventDialog}
-          event={newEvent}
-        />
-      )}
-      <CalendarRoot>
-        <Box ref={headerComponentRef} />
-        <DragAndDropCalendar
-          selectable
-          localizer={localizer}
-          events={events}
-          onEventDrop={handleEventMove}
-          resizable
-          onEventResize={handleEventResize}
-          defaultView={Views.MONTH}
-          defaultDate={new Date()}
-          startAccessor="start"
-          endAccessor="end"
-          views={viewList}
-          step={60}
-          showMultiDayTimes
-          components={{
-            toolbar: (props) => {
-              return headerComponentRef.current ? (
-                ReactDOM.createPortal(
-                  <CalendarHeader {...props} />,
-                  headerComponentRef.current
-                )
-              ) : (
-                <h3>There are no scheduled events</h3>
-              );
-            },
-          }}
-          // onNavigate={handleNavigate}
-          onSelectEvent={(event) => {
-            openExistingEventDialog(event);
-          }}
-          onSelectSlot={(slotDetails) => openNewEventDialog(slotDetails)}
-        />
-      </CalendarRoot>
-    </Container>
+      <Container>
+        {shouldShowEventDialog && (
+          <EventEditorDialog
+            handleClose={handleDialogClose}
+            open={shouldShowEventDialog}
+            event={newEvent}
+          />
+        )}
+        <CalendarRoot>
+          <Box ref={headerComponentRef} />
+          <DragAndDropCalendar
+            selectable
+            localizer={localizer}
+            events={events}
+            onEventDrop={handleEventMove}
+            resizable
+            onEventResize={handleEventResize}
+            defaultView={Views.MONTH}
+            defaultDate={new Date()}
+            startAccessor="start"
+            endAccessor="end"
+            views={viewList}
+            step={60}
+            showMultiDayTimes
+            components={{
+              toolbar: (props) => {
+                return headerComponentRef.current ? (
+                  ReactDOM.createPortal(
+                    <CalendarHeader {...props} />,
+                    headerComponentRef.current
+                  )
+                ) : (
+                  <h3>There are no scheduled events</h3>
+                );
+              },
+            }}
+            // onNavigate={handleNavigate}
+            onSelectEvent={(event) => {
+              openExistingEventDialog(event);
+            }}
+            onSelectSlot={(slotDetails) => openNewEventDialog(slotDetails)}
+          />
+        </CalendarRoot>
+      </Container>
+    </>
   );
 };
 export default EventCalendar;
