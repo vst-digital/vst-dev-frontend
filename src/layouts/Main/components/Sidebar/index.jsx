@@ -14,7 +14,8 @@ import { computeHeight, getInitials } from "../../../../shared/utilities/common.
 var navList = [...memberList];
 
 const role = localStorage.getItem("role");
- if ( role === "site_owner" ){ navList = [...memberList, ...siteOwnerList] }
+ if ( role === "subscription_owner" ){ navList = [...memberList, ...siteOwnerList] }
+ else if ( role === "site_owner" ){ navList = [...memberList, ...adminList] }
  else if ( role === "project_admin" ){ navList = [...memberList, ...adminList] }
         
 const useStyles = makeStyles((theme) => ({

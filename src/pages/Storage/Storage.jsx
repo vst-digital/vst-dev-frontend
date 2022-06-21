@@ -1,3 +1,16 @@
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from "@mui/material";
 import axios from "axios";
 import FileManager, {
   Column,
@@ -9,8 +22,12 @@ import FileManager, {
   Permissions,
   Toolbar,
 } from "devextreme-react/file-manager";
+import { useHttp } from "hooks";
 import React, { useEffect, useState } from "react";
+
 import { StorageFolder } from "shared/models";
+import { getAllMembersList } from "shared/services";
+import { getSelectDataSource } from "shared/utilities/common.util";
 import { convertBlobToBase64 } from "../../helpers/FileHelpers";
 
 const Storage = () => {
@@ -20,8 +37,21 @@ const Storage = () => {
   };
 
   const [fileItemsOne, setFileItemsOne] = useState([]);
+  const [userList, setUserList] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [selectedUser, setSelectedUser] = useState(undefined);
   const [parentFolder, setParentFolder] = useState("");
   const [itemViewMode, setItemViewMode] = useState("thumbnails");
+
+  const { requestHandler } = useHttp();
+
+  useEffect(() => {
+    fetchFiles();
+
+    getSelectDataSource(requestHandler, getAllMembersList())
+      .then((res) => setUserList(res?.data))
+      .catch((error) => console.error(error));
+  }, []);
 
   const onFileUploaded = async (e) => {
     try {
@@ -99,7 +129,7 @@ const Storage = () => {
     const fileID = item?.dataItem?.items[0]?.id; //not the id, but the object id
 
     let temp = "FALSE";
-    // // TODO: move all these configs to axios service
+    // TODO: move all these configs to axios service
     try {
       axios.defaults.headers["Content-Type"] = "application/json";
       axios.defaults.headers["accept"] = "application/json";
@@ -141,10 +171,6 @@ const Storage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchFiles();
-  }, []);
-
   const fetchFiles = () => {
     try {
       axios.defaults.headers["Content-Type"] = "application/json";
@@ -168,13 +194,10 @@ const Storage = () => {
     }
   };
 
-  const onItemClick = ({ itemData, fileSystemItem }) => {
-    let updated = false;
-    if (itemData.text === "Share") {
-      updated = this.share(fileSystemItem);
-    }
-    if (updated) {
-      this.fileManager.refresh();
+  // Common click event on file manager
+  const onItemClick = ({ itemData }) => {
+    if (itemData?.text === "Share") {
+      handleClickOpen();
     }
   };
 
@@ -199,10 +222,54 @@ const Storage = () => {
     }
   };
 
+  // On selcting user from the user list
+  const handleChange = (event) => {
+    setSelectedUser(event?.target?.value || undefined);
+  };
+
+  // Open the user selction to share
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  // Close the user selection
+  const handleClose = (event, reason) => {
+    if (reason !== "backdropClick") {
+      setOpen(false);
+    }
+  };
+
+  // Share the File with the selected user
+  const shareFile = (e) => {
+    e?.preventDefault();
+    handleClose();
+
+    // TODO: move all these configs to axios service
+    try {
+      axios.defaults.headers["Content-Type"] = "application/json";
+      axios.defaults.headers["accept"] = "application/json";
+      axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+      axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+      axios
+        .post(`${process.env.REACT_APP_API_BASE_URL}/user_storage_accesses`, {
+          user_storage_access: {
+            user_storage_id: localStorage.getItem("user_id"),
+            shared_with_id: selectedUser,
+          },
+        })
+        .then((res) => {
+          const fileURL = res?.data?.url;
+          window.open(fileURL, "_blank");
+        })
+        .catch((error) => console.error(error));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <FileManager
-        // ref={this.fileManagerRef}
         fileSystemProvider={fileItemsOne}
         onContextMenuItemClick={onItemClick}
         onOptionChanged={onOptionChanged}
@@ -271,6 +338,55 @@ const Storage = () => {
           <Item name="refresh" />
         </ContextMenu>
       </FileManager>
+
+      {/* User Select Dialog */}
+      <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
+        <DialogTitle>Select user to share:</DialogTitle>
+        <DialogContent>
+          <Box component="form" sx={{ display: "flex", flexWrap: "wrap" }}>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel htmlFor="demo-dialog-native">User</InputLabel>
+              <Select
+                native
+                value={selectedUser}
+                onChange={handleChange}
+                input={<OutlinedInput label="User" id="demo-dialog-native" />}
+              >
+                <option aria-label="None" value={undefined} />
+                {userList?.map((user) => (
+                  <option
+                    key={user?.id}
+                    value={user?.id}
+                  >{`${user?.first_name} ${user?.last_name}`}</option>
+                ))}
+              </Select>
+            </FormControl>
+
+            {/* TODO: Enable user to select A complete user group to share the file */}
+            {/* <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-dialog-select-label">User Group</InputLabel>
+              <Select
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={selectedUser}
+                onChange={handleChange}
+                input={<OutlinedInput label="Age" />}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl> */}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={shareFile}>Ok</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

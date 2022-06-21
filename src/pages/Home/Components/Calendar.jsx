@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Calendar = ({ history, location }) => {
+const Calendar = ({ history }) => {
   const classes = useStyles();
 
   return (

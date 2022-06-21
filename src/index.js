@@ -1,18 +1,23 @@
 import "react-app-polyfill/ie11";
 import "react-app-polyfill/stable";
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Provider} from "react-redux";
-import {BrowserRouter} from "react-router-dom";
-import reportWebVitals from './reportWebVitals';
-
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import reportWebVitals from "./reportWebVitals";
 
 import App from "./App";
 import store from "./store/store";
 
 ReactDOM.render(
-    <Provider store={store}><BrowserRouter><App/></BrowserRouter></Provider>,
-    document.getElementById("root")
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
