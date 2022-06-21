@@ -18,6 +18,9 @@ const role = localStorage.getItem("role");
 var pagesWithAuthentication = [...memberPages];
 if (role === "site_owner") {
   pagesWithAuthentication = [...memberPages, ...siteOwnerPages];
+}
+if (role === "subscription_owner") {
+  pagesWithAuthentication = [...memberPages, ...siteOwnerPages];
 } else if (role === "project_admin") {
   pagesWithAuthentication = [...memberPages, ...projectAdminPages];
 }

@@ -9,41 +9,44 @@ import ProjectInformation from "./Components/ProjectInformation";
 import ProjectSettings from "./Components/ProjectSettings";
 import Reports from "./Components/Reports";
 import SelectProject from "./Components/SelectProject";
-import ChatModule from './Components/ChatModule'
-import ChatBox from './Components/ChatBox'
+import ChatModule from "./Components/ChatModule";
+import ChatBox from "./Components/ChatBox";
 
 const ProjectAdminView = ({ history, location }) => {
-        return (
-         <Container>
-                <Grid container spacing={2}>
-                    <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <AvailableProjects history={history} location={location}></AvailableProjects>
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <ProjectInformation history={history} location={location}/>
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <ProjectSettings history={history} location={location} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <Communication history={history} location={location} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <Calander history={history} location={location}/>
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <DocumentManager history={history} location={location}/>
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <Library history={history} location={location}/>
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={3} xs={12}>
-                        <Reports history={history} location={location}/>
-                    </Grid>
-                </Grid>
-               <ChatModule></ChatModule>
-               {/* <ChatBox></ChatBox> */}
-            </Container>
-        );
+  return (
+    <Container>
+      <Grid container spacing={2}>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <AvailableProjects
+            history={history}
+            location={location}
+          ></AvailableProjects>
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <ProjectInformation history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <ProjectSettings history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Communication history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Calander history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <DocumentManager history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Library history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Reports history={history} location={location} />
+        </Grid>
+      </Grid>
+      <ChatModule></ChatModule>
+      {/* <ChatBox></ChatBox> */}
+    </Container>
+  );
 };
 export default ProjectAdminView;

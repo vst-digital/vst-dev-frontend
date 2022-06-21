@@ -11,14 +11,18 @@ const Home = ({ history }) => {
   if (project_id) {
     return (
       <Container title="Home">
+        {role === "subscription_owner" && ( //site-owner and admin view are currently same till we add site-owner controls
+          <SiteOwnerView history={history}></SiteOwnerView>
+        )}
         {role === "site_owner" && ( //site-owner and admin view are currently same till we add site-owner controls
           <SiteOwnerView history={history}></SiteOwnerView>
         )}
         {role === "project_admin" && (
           <ProjectAdminView history={history}></ProjectAdminView>
         )}
-        <hr />
-        <MemberView history={history}></MemberView>
+        {role === "project_member" && (
+          <MemberView history={history}></MemberView>
+        )}
       </Container>
     );
   }

@@ -113,11 +113,14 @@ const UserInvitation = ({ history, props }) => {
         </Avatar>
 
         <Typography variant="h5">Accept Invitation</Typography>
+        <Typography variant="h6">
+          Enter a password to accept your invitation
+        </Typography>
 
         <form className={classes.form} onSubmit={handleSubmit}>
-          <TextField
+          <input
             id="token"
-            label="Token"
+            type="hidden"
             margin="normal"
             size="medium"
             value={values.token}
