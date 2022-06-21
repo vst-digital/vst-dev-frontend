@@ -3,94 +3,123 @@ import loadable from "@loadable/component";
 const Dashboard = loadable(() => import("../pages/Dashboard"));
 const Home = loadable(() => import("../pages/Home"));
 const STORAGE = loadable(() => import("../pages/Storage/Storage"));
+const CALENDAR = loadable(() => import("../pages/Calendar"));
 
 const CONTACT = {
-    ALL : loadable(() => import("../pages/Contact/ViewAllContact")),
-    VIEW : loadable(() => import("../pages/Contact/ViewContact")),
-    NEW : loadable(() => import("../pages/Contact/CreateUpdateContact")),
-    EDIT : loadable(() => import("../pages/Contact/CreateUpdateContact"))
-}; 
-
+  ALL: loadable(() => import("../pages/Contact/ViewAllContact")),
+  VIEW: loadable(() => import("../pages/Contact/ViewContact")),
+  NEW: loadable(() => import("../pages/Contact/CreateUpdateContact")),
+  EDIT: loadable(() => import("../pages/Contact/CreateUpdateContact")),
+};
 
 const PROJECT = {
-    ALL : loadable(() => import("../pages/Project/ViewAllProject")),
-    VIEW : loadable(() => import("../pages/Project/ViewProject")),
-    NEW : loadable(() => import("../pages/Project/CreateUpdateProject")),
-    EDIT : loadable(() => import("../pages/Project/CreateUpdateProject"))
-}; 
+  ALL: loadable(() => import("../pages/Project/ViewAllProject")),
+  VIEW: loadable(() => import("../pages/Project/ViewProject")),
+  NEW: loadable(() => import("../pages/Project/CreateUpdateProject")),
+  EDIT: loadable(() => import("../pages/Project/CreateUpdateProject")),
+};
 
 const GROUP = {
-    ALL : loadable(() => import("../pages/Group/ViewAllGroup")),
-    VIEW : loadable(() => import("../pages/Group/ViewGroup")),
-    NEW : loadable(() => import("../pages/Group/CreateUpdateGroup")),
-    EDIT : loadable(() => import("../pages/Group/CreateUpdateGroup"))
-}; 
+  ALL: loadable(() => import("../pages/Group/ViewAllGroup")),
+  VIEW: loadable(() => import("../pages/Group/ViewGroup")),
+  NEW: loadable(() => import("../pages/Group/CreateUpdateGroup")),
+  EDIT: loadable(() => import("../pages/Group/CreateUpdateGroup")),
+};
 
 const MEMO = {
-    ALL : loadable(() => import("../pages/Communication/Memo/ViewAllMemo")),
-    VIEW : loadable(() => import("../pages/Communication/Memo/ViewMemo")),
-    NEW : loadable(() => import("../pages/Communication/Memo/CreateMemo")),
-
-}; 
+  ALL: loadable(() => import("../pages/Communication/Memo/ViewAllMemo")),
+  VIEW: loadable(() => import("../pages/Communication/Memo/ViewMemo")),
+  NEW: loadable(() => import("../pages/Communication/Memo/CreateMemo")),
+};
 
 const MEMOTEMPLATE = {
-    ALL : loadable(() => import("../pages/Communication/MemoTemplate/CreatorPages/ViewAllMemoTemplate")),
-    VIEW : loadable(() => import("../pages/Communication/MemoTemplate/CreatorPages/ViewMemoTemplate")),
-    NEW : loadable(() => import("../pages/Communication/MemoTemplate/CreatorPages/CreateUpdateMemoTemplate")),
-    EDIT : loadable(() => import("../pages/Communication/MemoTemplate/CreatorPages/CreateUpdateMemoTemplate")),
-}
+  ALL: loadable(() =>
+    import(
+      "../pages/Communication/MemoTemplate/CreatorPages/ViewAllMemoTemplate"
+    )
+  ),
+  VIEW: loadable(() =>
+    import("../pages/Communication/MemoTemplate/CreatorPages/ViewMemoTemplate")
+  ),
+  NEW: loadable(() =>
+    import(
+      "../pages/Communication/MemoTemplate/CreatorPages/CreateUpdateMemoTemplate"
+    )
+  ),
+  EDIT: loadable(() =>
+    import(
+      "../pages/Communication/MemoTemplate/CreatorPages/CreateUpdateMemoTemplate"
+    )
+  ),
+};
 
 const COMMUNICATION = {
-    ALL : loadable(()=> import("../pages/Communication/CommunicationIndex"))
-}
+  ALL: loadable(() => import("../pages/Communication/CommunicationIndex")),
+};
 
 export const siteOwnerPages = [
-    {id: "contact", path: "/contacts", component: CONTACT.VIEW},
-    {id: "contact_edit", path: "/contact/edit", component: CONTACT.EDIT},
-    {id: "contact_new", path: "/contact/new", component: CONTACT.NEW},
-    
-    {id: "project", path: "/projects", component: PROJECT.ALL},
-    {id: "project", path: "/project/view", component: PROJECT.VIEW},
-    {id: "project_edit", path: "/project/edit", component: PROJECT.EDIT},
-    {id: "project_new", path: "/project/new", component: PROJECT.NEW},
+  { id: "contact", path: "/contacts", component: CONTACT.VIEW },
+  { id: "contact_edit", path: "/contact/edit", component: CONTACT.EDIT },
+  { id: "contact_new", path: "/contact/new", component: CONTACT.NEW },
 
-    {id: "group", path: "/groups", component: GROUP.ALL},
-    {id: "group_view", path: "/group/view", component: GROUP.VIEW},
-    {id: "group_edit", path: "/group/edit", component: GROUP.EDIT},
-    {id: "group_new", path: "/group/new", component: GROUP.NEW},
-    
+  { id: "project", path: "/projects", component: PROJECT.ALL },
+  { id: "project", path: "/project/view", component: PROJECT.VIEW },
+  { id: "project_edit", path: "/project/edit", component: PROJECT.EDIT },
+  { id: "project_new", path: "/project/new", component: PROJECT.NEW },
 
+  { id: "group", path: "/groups", component: GROUP.ALL },
+  { id: "group_view", path: "/group/view", component: GROUP.VIEW },
+  { id: "group_edit", path: "/group/edit", component: GROUP.EDIT },
+  { id: "group_new", path: "/group/new", component: GROUP.NEW },
 ];
 export const projectAdminPages = [
-    {id: "contact", path: "/contacts", component: CONTACT.VIEW},
-    {id: "contact_edit", path: "/contact/edit", component: CONTACT.EDIT},
-    {id: "contact_new", path: "/contact/new", component: CONTACT.NEW},
-    
-    {id: "project", path: "/projects", component: PROJECT.ALL},
-    {id: "project", path: "/project/view", component: PROJECT.VIEW},
-    {id: "project_edit", path: "/project/edit", component: PROJECT.EDIT},
-    {id: "project_new", path: "/project/new", component: PROJECT.NEW},
+  { id: "contact", path: "/contacts", component: CONTACT.VIEW },
+  { id: "contact_edit", path: "/contact/edit", component: CONTACT.EDIT },
+  { id: "contact_new", path: "/contact/new", component: CONTACT.NEW },
 
-    {id: "group", path: "/groups", component: GROUP.ALL},
-    {id: "group_view", path: "/group/view", component: GROUP.VIEW},
-    {id: "group_edit", path: "/group/edit", component: GROUP.EDIT},
-    {id: "group_new", path: "/group/new", component: GROUP.NEW},
-    
+  { id: "project", path: "/projects", component: PROJECT.ALL },
+  { id: "project", path: "/project/view", component: PROJECT.VIEW },
+  { id: "project_edit", path: "/project/edit", component: PROJECT.EDIT },
+  { id: "project_new", path: "/project/new", component: PROJECT.NEW },
+
+  { id: "group", path: "/groups", component: GROUP.ALL },
+  { id: "group_view", path: "/group/view", component: GROUP.VIEW },
+  { id: "group_edit", path: "/group/edit", component: GROUP.EDIT },
+  { id: "group_new", path: "/group/new", component: GROUP.NEW },
 ];
 export const memberPages = [
-    {id: "dashboard", path: "/dashboard", component: Dashboard},
-    {id: "home", path: "/home", component: Home},
-    {id: "communications", path: "/communications", component: COMMUNICATION.ALL},
-    
-    {id: "storage", path: "/storages", component: STORAGE},
-    {id: "memo_template_new", path: "/memo_template/new", component: MEMOTEMPLATE.NEW},
-    {id: "memo_template_all", path: "/memo_template/all", component: MEMOTEMPLATE.ALL},
-    {id: "memo_template_edit", path: "/memo_template/edit", component: MEMOTEMPLATE.EDIT},
-    {id: "memo_template_view", path: "/memo_template/view", component: MEMOTEMPLATE.VIEW},
+  { id: "dashboard", path: "/dashboard", component: Dashboard },
+  { id: "home", path: "/home", component: Home },
+  {
+    id: "communications",
+    path: "/communications",
+    component: COMMUNICATION.ALL,
+  },
 
-    {id: "memo_new", path: "/memo/new", component: MEMO.NEW},
-    {id: "memo_all", path: "/memo/all", component: MEMO.ALL},
-    {id: "memo_view", path: "/memo/view", component: MEMO.VIEW},
-    
+  { id: "storage", path: "/storages", component: STORAGE },
+  { id: "calendar", path: "/calendar", component: CALENDAR },
+  {
+    id: "memo_template_new",
+    path: "/memo_template/new",
+    component: MEMOTEMPLATE.NEW,
+  },
+  {
+    id: "memo_template_all",
+    path: "/memo_template/all",
+    component: MEMOTEMPLATE.ALL,
+  },
+  {
+    id: "memo_template_edit",
+    path: "/memo_template/edit",
+    component: MEMOTEMPLATE.EDIT,
+  },
+  {
+    id: "memo_template_view",
+    path: "/memo_template/view",
+    component: MEMOTEMPLATE.VIEW,
+  },
 
+  { id: "memo_new", path: "/memo/new", component: MEMO.NEW },
+  { id: "memo_all", path: "/memo/all", component: MEMO.ALL },
+  { id: "memo_view", path: "/memo/view", component: MEMO.VIEW },
 ];

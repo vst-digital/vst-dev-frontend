@@ -180,3 +180,11 @@ export const AcceptInvitation = yup.object({
     token: yup.string().required('Token is required'),
     password: yup.string().required('Password is required')
 });
+export const Calendar_Validation = yup.object({
+    title: yup.string().required().label('Title'),
+    start_date: yup.date().required().label('Start Date'),
+    end_date: yup.date().required().label('End Date'),
+    subject: yup.string().required().label('Location'),
+    subject: yup.string().required().label('Subject'),
+    receiver_id: yup.array().required().label('Receiver'),
+});
