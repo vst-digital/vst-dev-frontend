@@ -25,7 +25,9 @@ const App = () => {
 
   useEffect(() => {
     dispatch(authCheckState(history));
-  }, [dispatch]);
+  }, [dispatch, history]);
+
+  // TODO: remove all commented code if they are useless
 
   // // Adding event listener on tab close event
   // useEffect(() => {
@@ -48,6 +50,22 @@ const App = () => {
   //   event.returnValue = "If you close the tab, you will log out!!";
   // };
 
+  const _renderView = () => {
+    if (isAuthenticated) {
+      return (
+        <MainLayout history={history}>
+          <Routes isAuthenticated={isAuthenticated} />
+        </MainLayout>
+      );
+    }
+
+    return (
+      <MinimalLayout>
+        <Routes isAuthenticated={isAuthenticated} />
+      </MinimalLayout>
+    );
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -56,16 +74,7 @@ const App = () => {
         <>
           <Spinner open={isLoading} />
           <Notification {...notification} />
-          {isAuthenticated !== null &&
-            (isAuthenticated ? (
-              <MainLayout history={history}>
-                <Routes isAuthenticated={isAuthenticated} />
-              </MainLayout>
-            ) : (
-              <MinimalLayout>
-                <Routes isAuthenticated={isAuthenticated} />
-              </MinimalLayout>
-            ))}
+          {_renderView()}
         </>
       </MuiPickersUtilsProvider>
     </ThemeProvider>
