@@ -6,11 +6,8 @@ import Communication from "./Components/Communication";
 import DocumentManager from "./Components/DocumentManager";
 import Library from "./Components/Library";
 import ChatModule from "./Components/ChatModule";
-
+import Inspection from "./Components/Inspection";
 const MemberView = ({ history, location }) => {
-  const user = localStorage.getItem("user");
-
-  const project_id = localStorage.getItem("project_id");
   return (
     <Container>
       <Grid container spacing={2}>
@@ -23,6 +20,9 @@ const MemberView = ({ history, location }) => {
 
         <Grid item lg={3} sm={6} xl={3} xs={12}>
           <Communication history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Inspection history={history} location={location} />
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12}>
           <Calendar history={history} location={location} />
