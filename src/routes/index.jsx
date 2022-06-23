@@ -27,6 +27,9 @@ const role = localStorage.getItem("role");
 var pagesWithAuthentication = [...memberPages];
 if (role === "site_owner") {
   pagesWithAuthentication = [...memberPages, ...siteOwnerPages];
+}
+if (role === "subscription_owner") {
+  pagesWithAuthentication = [...memberPages, ...siteOwnerPages];
 } else if (role === "project_admin") {
   pagesWithAuthentication = [...memberPages, ...projectAdminPages];
 }
@@ -50,7 +53,7 @@ const Routes = ({ isAuthenticated }) => {
   return (
     <Switch>
       {getRoutes()}
-      {/* <Redirect
+      <Redirect
         from="/user_invitation/accept"
         to={!isAuthenticated ? "/home" : "/user_invitation/accept"}
       />
@@ -58,11 +61,11 @@ const Routes = ({ isAuthenticated }) => {
         exact
         from="/user_invitation"
         to={!isAuthenticated ? "/user_invitation" : "/home"}
-      /> */}
-      {/* <Redirect exact from="/" to={isAuthenticated ? "/home" : "/signIn"} /> */}
-      <Route path="*">
+      />
+      <Redirect exact from="/" to={isAuthenticated ? "/home" : "/signIn"} />
+      {/* <Route path="*">
         <Redirect to="/signIn" />
-      </Route>
+      </Route> */}
     </Switch>
   );
 };

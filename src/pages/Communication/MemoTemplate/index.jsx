@@ -41,7 +41,7 @@ const MemoTemplate = ({history, location}) => {
 
   return (
     <Card className={classes.root}>
-      <CardContent>
+      {/* <CardContent>
         <Grid container justifyContent="space-between">
           <Grid item>
             <Typography className={classes.title} variant="h3" color="textSecondary" gutterBottom >
@@ -57,7 +57,7 @@ const MemoTemplate = ({history, location}) => {
         <div className={classes.content}>
           <Button variant="contained" onClick={() => history.push('/memo_template/all')}>Memo Template</Button>
         </div>
-      </CardContent>
+      </CardContent> */}
     </Card>
   )
 }

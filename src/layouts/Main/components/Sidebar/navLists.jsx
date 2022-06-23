@@ -12,9 +12,16 @@ import {
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 
 export const memberList = [
   { id: "home", path: "/home", label: "Home", icon: Dashboard },
+  {
+    id: "documentManager",
+    path: "/storages",
+    label: "File Manager",
+    icon: Storage,
+  },
   {
     id: "communications",
     path: "/communications",
@@ -22,21 +29,27 @@ export const memberList = [
     icon: ChatBubble,
   },
   {
+    id: "inspection",
+    path: "/inspection",
+    label: "Inspection Sheets",
+    icon: AssignmentTurnedInIcon,
+  },
+  {
     id: "calendar",
     path: "/calendar",
     label: "Calendar",
     icon: CalendarTodayIcon,
   },
-  {
-    id: "documentManager",
-    path: "/storages",
-    label: "File Manager",
-    icon: Storage,
-  },
   { id: "library", path: "/library", label: "Library", icon: MenuBookIcon },
 ];
 export const adminList = [
   {
+    id: "projectInformation",
+    path: "/projectInformation",
+    label: "Project Information",
+    icon: AccountTree,
+  },
+  {
     id: "project_setting",
     label: "Project Setting",
     icon: SettingsApplications,
@@ -46,17 +59,17 @@ export const adminList = [
       { id: "permissions", path: "/permissions", label: "Permission" },
     ],
   },
-  {
-    id: "projectInformation",
-    path: "/projectInformation",
-    label: "Project Information",
-    icon: AccountTree,
-  },
   { id: "contacts_id", path: "/contacts", label: "Members", icon: ContactMail },
-  { id: "report", path: "/report", label: "Report", icon: LibraryBooksIcon },
+  { id: "report", path: "/report", label: "Reports", icon: LibraryBooksIcon },
 ];
 export const siteOwnerList = [
   {
+    id: "projectInformation",
+    path: "/projectInformation",
+    label: "Project Information",
+    icon: AccountTree,
+  },
+  {
     id: "project_setting",
     label: "Project Setting",
     icon: SettingsApplications,
@@ -66,12 +79,6 @@ export const siteOwnerList = [
       { id: "permissions", path: "/permissions", label: "Permission" },
     ],
   },
-  {
-    id: "projectInformation",
-    path: "/projectInformation",
-    label: "Project Information",
-    icon: AccountTree,
-  },
   { id: "contacts_id", path: "/contacts", label: "Members", icon: ContactMail },
-  { id: "report", path: "/report", label: "Report", icon: LibraryBooksIcon },
+  { id: "report", path: "/report", label: "Reports", icon: LibraryBooksIcon },
 ];

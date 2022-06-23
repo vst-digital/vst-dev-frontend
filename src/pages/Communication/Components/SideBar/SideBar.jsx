@@ -1,8 +1,16 @@
-import React from 'react';
-import { ReactFormGenerator, ElementStore } from 'react-form-builder2';
-import { postMemoTemplate, getMemoTemplates, getMemoTemplate } from "shared/services/memo.service";
-import axios from 'axios';
-import { authFailure, authSuccess, checkAuthTimeout } from "store/actions/auth.actions";
+import React from "react";
+import { ReactFormGenerator, ElementStore } from "react-form-builder2";
+import {
+  postMemoTemplate,
+  getMemoTemplates,
+  getMemoTemplate,
+} from "shared/services/memo.service";
+import axios from "axios";
+import {
+  authFailure,
+  authSuccess,
+  checkAuthTimeout,
+} from "store/actions/auth.actions";
 
 export default class SideBar extends React.Component {
   constructor(props) {
@@ -12,7 +20,7 @@ export default class SideBar extends React.Component {
       previewVisible: false,
     };
     const update = this._onChange.bind(this);
-    ElementStore.subscribe(state => update(state.data));
+    ElementStore.subscribe((state) => update(state.data));
   }
 
   showPreview() {
@@ -38,19 +46,20 @@ export default class SideBar extends React.Component {
   _onSubmit = async () => {
     if (this.state.data.length != 0) {
       try {
-        axios.defaults.headers['Content-Type'] = 'application/json'
-        axios.defaults.headers["accept"] = 'application/javascript'
+        axios.defaults.headers["Content-Type"] = "application/json";
+        axios.defaults.headers["accept"] = "application/javascript";
         axios.defaults.headers["Authorization"] = localStorage.getItem("token");
         axios.defaults.headers["Project"] = localStorage.getItem("project_id");
-        axios.post(`${process.env.REACT_APP_API_BASE_URL}/user_memo_templates`, {
-          memo_template: {
-            json: this.state.data
-          }
-        })
-        .then(res => {
-          this.props.props.history.push("/memo_template/all")        
-        })
-        .catch(error => console.error(error));
+        axios
+          .post(`${process.env.REACT_APP_API_BASE_URL}/user_memo_templates`, {
+            memo_template: {
+              json: this.state.data,
+            },
+          })
+          .then((res) => {
+            this.props.props.history.push("/memo_template/all");
+          })
+          .catch((error) => console.error(error));
       } catch (e) {
         console.log(e);
       }
@@ -58,20 +67,28 @@ export default class SideBar extends React.Component {
   };
 
   render() {
-    let modalClass = 'modal';
+    let modalClass = "modal";
     if (this.state.previewVisible) {
-      modalClass += ' show d-block';
+      modalClass += " show d-block";
     }
 
     return (
-      <div className="clearfix" style={{ margin: '10px', width: '70%' }}>
+      <div className="clearfix" style={{ margin: "10px", width: "70%" }}>
         <h4 className="float-left">Preview</h4>
-        <button className="btn btn-primary float-right" style={{ marginRight: '10px' }} onClick={this.showPreview.bind(this)}>Preview Form</button>
-        {this.state.previewVisible &&
+        <button
+          className="btn btn-primary float-right"
+          style={{ marginRight: "10px" }}
+          onClick={this.showPreview.bind(this)}
+        >
+          Preview Form
+        </button>
+        {this.state.previewVisible && (
           <div className={modalClass}>
             <div className="modal-dialog modal-lg">
               <div className="modal-content">
                 <ReactFormGenerator
+                  container
+                  spacing={2}
                   download_path=""
                   back_action="/"
                   back_name="Back"
@@ -84,12 +101,19 @@ export default class SideBar extends React.Component {
                   hide_actions={false}
                 />
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Close</button>
+                  <button
+                    type="button"
+                    className="btn btn-default"
+                    data-dismiss="modal"
+                    onClick={this.closePreview.bind(this)}
+                  >
+                    Close
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }

@@ -5,6 +5,10 @@ const Home = loadable(() => import("../pages/Home"));
 const STORAGE = loadable(() => import("../pages/Storage/Storage"));
 const CALENDAR = loadable(() => import("../pages/Calendar"));
 
+const INSPECTION = {
+  ALL: loadable(() => import("../pages/Inspection")),
+  NEW: loadable(() => import("../pages/Inspection/NewSheet")),
+};
 const CONTACT = {
   ALL: loadable(() => import("../pages/Contact/ViewAllContact")),
   VIEW: loadable(() => import("../pages/Contact/ViewContact")),
@@ -34,9 +38,7 @@ const MEMO = {
 
 const MEMOTEMPLATE = {
   ALL: loadable(() =>
-    import(
-      "../pages/Communication/MemoTemplate/CreatorPages/ViewAllMemoTemplate"
-    )
+    import("../pages/Communication/Memo/Components/NewTemplate")
   ),
   VIEW: loadable(() =>
     import("../pages/Communication/MemoTemplate/CreatorPages/ViewMemoTemplate")
@@ -98,6 +100,12 @@ export const memberPages = [
 
   { id: "storage", path: "/storages", component: STORAGE },
   { id: "calendar", path: "/calendar", component: CALENDAR },
+  { id: "inspection", path: "/inspection", component: INSPECTION.ALL },
+  {
+    id: "new_inspection_sheet",
+    path: "/inspection/new",
+    component: INSPECTION.NEW,
+  },
   {
     id: "memo_template_new",
     path: "/memo_template/new",
