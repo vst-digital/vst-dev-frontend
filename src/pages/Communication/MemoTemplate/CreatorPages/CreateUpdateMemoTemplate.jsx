@@ -1,21 +1,18 @@
-import { ReactFormBuilder } from 'react-form-builder2';
-import SideBar from '../../Components/SideBar/SideBar';
-import 'react-form-builder2/dist/app.css';
-import "../../Components/SideBar/styes/CommunicationBase.scss"
-import Grid from "@material-ui/core/Grid";
+import { ReactFormBuilder } from "react-form-builder2";
+import SideBar from "../../Components/SideBar/SideBar";
+import "react-form-builder2/dist/app.css";
+import "../../Components/SideBar/styes/CommunicationBase.scss";
 import { Container } from "components";
 
 const CreateUpdateMemo = (props) => {
   return (
-    <Container>
-      <Grid>
-        <div className="communication-wrapper">
-          <ReactFormBuilder />
-          <SideBar props={props} />
-        </div>
-      </Grid>
+    <Container container spacing={2}>
+      <div className="communication-wrapper">
+        <ReactFormBuilder />
+        <SideBar props={props} />
+      </div>
     </Container>
-  )
-}
+  );
+};
 
 export default CreateUpdateMemo;

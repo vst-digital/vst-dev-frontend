@@ -3,16 +3,13 @@ import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-
-import RecievedEmails from "./Components/RecievedEmails";
-import SentEmails from "./Components/SentEmails";
-import NewTemplate from "./Components/NewTemplate";
-
+import { Templates } from "./Templates";
+import { Sheets } from "./Sheets";
 const useStyles = makeStyles((theme) => ({
   tabsRoot: { borderBottom: `1px solid ${theme.palette.grey[300]}` },
 }));
 
-const ViewAllMemo = ({ history }) => {
+const Inspection = ({ history }) => {
   const classes = useStyles();
 
   const [tabIndex, setTabIndex] = useState(0);
@@ -29,24 +26,21 @@ const ViewAllMemo = ({ history }) => {
           onChange={handleChange}
         >
           <Tab label={"Templates"} />
-          <Tab label={"Memos"} />
+          <Tab label={"Inspection Sheets"} />
         </Tabs>
       </Grid>
       {tabIndex === 0 && (
         <Grid item xs={12}>
-          <NewTemplate history={history} />
+          <Templates history={history} />
         </Grid>
       )}
       {tabIndex === 1 && (
         <Grid item xs={12}>
-          <Grid item xs={12}>
-            <RecievedEmails history={history} />
-            <SentEmails history={history} />
-          </Grid>
+          <Sheets history={history} />
         </Grid>
       )}
     </Grid>
   );
 };
 
-export default ViewAllMemo;
+export default Inspection;

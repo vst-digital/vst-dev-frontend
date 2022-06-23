@@ -2,8 +2,9 @@
   display: flex;
   flex-direction: column-reverse;
 
-  .clearfix > div {
+  .clearfix>div {
     display: flex;
+
     .col-md-9.react-form-builder-preview.float-left {
       flex: 2;
     }
@@ -14,6 +15,7 @@
   }
 
   .modal-content {
+    padding: 20px;
     z-index: 1;
     position: absolute;
     top: 25vh;

@@ -3,7 +3,6 @@ import get from "lodash/get";
 import { useFormik } from "formik";
 import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import "react-form-builder2/dist/app.css";
-import "../Components/SideBar/styes/CommunicationBase.scss";
 import { useHttp } from "hooks";
 import { AsyncSelect, Container, Panel, TextField } from "components";
 import { Memo } from "shared/models";
@@ -164,11 +163,11 @@ const CreateMemberMemo = ({ history, location }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Container
-        title={`Compose Memo`}
+        title={`New Inspection Sheet`}
         actions={
           <>
             <Button type="submit" color="primary" variant="contained">
-              Send
+              Create
             </Button>
             <Button
               variant="contained"
@@ -195,6 +194,7 @@ const CreateMemberMemo = ({ history, location }) => {
                     helperText={touched.template && errors.template}
                   />
                 </Grid>
+
                 <Grid item xs={6}>
                   <Typography gutterBottom>Subject</Typography>
                   <TextField
@@ -205,69 +205,6 @@ const CreateMemberMemo = ({ history, location }) => {
                     helperText={touched.subject && errors.subject}
                   />
                 </Grid>
-                <Grid item xs={6} direction="row">
-                  <Typography gutterBottom>Receiver</Typography>
-                  <AsyncSelect
-                    id={"receiver_id"}
-                    getOptionLabel={(getMemberLabel) =>
-                      getMemberLabel.email || ""
-                    }
-                    loadingMethod={getReceiverList}
-                    value={values.receiver_id}
-                    onChange={onReceiverChange}
-                    error={touched.receiver_id && Boolean(errors.receiver_id)}
-                    helperText={touched.receiver_id && errors.receiver_id}
-                    multiple
-                    // freesolo
-                  />
-                  {/* <a onClick={() => setBccPerview(true)} className={classes.link}>Bcc</a> */}
-                </Grid>
-                {/* {bccPerview && (
-                  <Grid item xs={6}>
-                    <Typography gutterBottom>Bcc</Typography>
-                    <AsyncSelect
-                      id={"bcc"}
-                      getOptionLabel={(getMemberLabel) =>
-                        getMemberLabel.email || ""
-                      }
-                      loadingMethod={getReceiverList}
-                      value={values.bcc}
-                      onChange={onBccChange}
-                      error={touched.receiver_id && Boolean(errors.receiver_id)}
-                      helperText={touched.receiver_id && errors.receiver_id}
-                      multiple
-                    />
-                  </Grid> */}
-                {/* )} */}
-                {!ccPerview && (
-                  <Grid item xs={6}>
-                    <Button
-                      onClick={() => setCcPerview(true)}
-                      className={classes.link}
-                      fullwidth
-                    >
-                      CC
-                    </Button>
-                  </Grid>
-                )}
-                {ccPerview && (
-                  <Grid item xs={6}>
-                    <Typography gutterBottom>CC</Typography>
-                    <AsyncSelect
-                      id={"cc"}
-                      getOptionLabel={(getMemberLabel) =>
-                        getMemberLabel.email || ""
-                      }
-                      loadingMethod={getReceiverList}
-                      value={values.cc}
-                      onChange={onCcChange}
-                      error={touched.receiver_id && Boolean(errors.receiver_id)}
-                      helperText={touched.receiver_id && errors.receiver_id}
-                      multiple
-                    />
-                  </Grid>
-                )}
-
                 {preview && (
                   <Grid item xs={12} onChange={OnMemoChange}>
                     <Typography>Selected Template</Typography>

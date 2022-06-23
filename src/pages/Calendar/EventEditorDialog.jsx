@@ -92,7 +92,7 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
     let id = tempId?.substr(2, tempId.length - 1);
     return id;
   };
-  let { title, location, note } = calendarEvent;
+  let { title, location, subject } = calendarEvent;
 
   const { values, touched, errors, handleSubmit } = useFormik({
     initialValues: Calendar,
@@ -155,7 +155,7 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
             onChange={handleChange}
             type="text"
             name="subject"
-            value={note || ""}
+            value={subject || ""}
             multiline={true}
             validators={["required"]}
             errorMessages={["this field is required"]}

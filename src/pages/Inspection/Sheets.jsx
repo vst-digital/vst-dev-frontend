@@ -1,16 +1,28 @@
 import { useState, useEffect } from "react";
-import { Button, makeStyles, Card } from "@material-ui/core";
+import {
+  Button,
+  makeStyles,
+  Menu,
+  MenuItem,
+  SvgIcon,
+  Grid,
+  Card,
+} from "@material-ui/core";
 import AddRounded from "@material-ui/icons/AddRounded";
+import ViewIcon from "@material-ui/icons/Visibility";
+import MoreIcon from "@material-ui/icons/MoreVert";
 
 import { useHttp } from "hooks";
 import { Container, IndexTable } from "components";
-import { getRecievedMemos, getMemo } from "shared/services";
+import { getRecievedMemos, getMemo, getSentMemos } from "shared/services";
 import { Memo } from "shared/models";
+import { MemoSchema } from "shared/utilities/dataGridSchema";
 import { createArray } from "shared/utilities/common.util";
 import { DataGrid } from "@material-ui/data-grid";
 
 import actionCable from "actioncable";
 import { createTheme } from "@material-ui/core/styles";
+
 const defaultTheme = createTheme();
 const useStyles = makeStyles(
   (theme) => {
@@ -33,7 +45,7 @@ const useStyles = makeStyles(
   { defaultTheme }
 );
 
-const RecievedEmails = ({ history }) => {
+export const Sheets = ({ history }) => {
   const classes = useStyles();
   const { notify, requestHandler } = useHttp();
   const [refreshTable, setRefreshTable] = useState(false);
@@ -52,8 +64,7 @@ const RecievedEmails = ({ history }) => {
     },
     {
       received: (res) => {
-        // const data = JSON.parse(res["message"])
-        const data = res["message"];
+        const data = JSON.parse(res["message"]);
         const count = 1;
         setTableDataCount((prev) => prev + count);
         setTableData((prev) => [data.data.attributes, ...prev]);
@@ -75,7 +86,7 @@ const RecievedEmails = ({ history }) => {
             const filter = {};
             const sort = "";
             const res = await requestHandler(
-              getRecievedMemos({ per_page, page_no, sort, filter })
+              getSentMemos({ per_page, page_no, sort, filter })
             );
             const data = res.data;
             const count = res.meta.pagination.count;
@@ -94,7 +105,9 @@ const RecievedEmails = ({ history }) => {
   }, []);
 
   const onAddClick = () => {
-    history.push(`/memo/new`, { data: { action: "Add", Memo: new Memo() } });
+    history.push(`/inspection/new`, {
+      data: { action: "Add", Memo: new Memo() },
+    });
   };
 
   const viewHandler = async (value) => {
@@ -118,7 +131,7 @@ const RecievedEmails = ({ history }) => {
   return (
     <>
       <Container
-        title="My Memos"
+        title="My Inspection Sheets"
         actions={
           <Button
             variant="contained"
@@ -126,7 +139,7 @@ const RecievedEmails = ({ history }) => {
             startIcon={<AddRounded />}
             onClick={onAddClick}
           >
-            New Memo
+            New Inspection Sheet
           </Button>
         }
       >
@@ -149,5 +162,3 @@ const RecievedEmails = ({ history }) => {
     </>
   );
 };
-
-export default RecievedEmails;
