@@ -11,6 +11,8 @@ import Reports from "./Components/Reports";
 import SelectProject from "./Components/SelectProject";
 import ChatModule from "./Components/ChatModule";
 import ChatBox from "./Components/ChatBox";
+import Inspection from "./Components/Inspection";
+import Maps from "./Components/Maps";
 
 const ProjectAdminView = ({ history, location }) => {
   return (
@@ -32,7 +34,13 @@ const ProjectAdminView = ({ history, location }) => {
           <Communication history={history} location={location} />
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Inspection history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
           <Calander history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Maps history={history} location={location} />
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12}>
           <DocumentManager history={history} location={location} />

@@ -4,6 +4,7 @@ const Dashboard = loadable(() => import("../pages/Dashboard"));
 const Home = loadable(() => import("../pages/Home"));
 const STORAGE = loadable(() => import("../pages/Storage/Storage"));
 const CALENDAR = loadable(() => import("../pages/Calendar"));
+const MAPS = loadable(() => import("../pages/Maps"));
 
 const INSPECTION = {
   ALL: loadable(() => import("../pages/Inspection")),
@@ -101,6 +102,7 @@ export const memberPages = [
   { id: "storage", path: "/storages", component: STORAGE },
   { id: "calendar", path: "/calendar", component: CALENDAR },
   { id: "inspection", path: "/inspection", component: INSPECTION.ALL },
+  { id: "maps", path: "/maps", component: MAPS },
   {
     id: "new_inspection_sheet",
     path: "/inspection/new",

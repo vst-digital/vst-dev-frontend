@@ -7,6 +7,7 @@ import DocumentManager from "./Components/DocumentManager";
 import Library from "./Components/Library";
 import ChatModule from "./Components/ChatModule";
 import Inspection from "./Components/Inspection";
+import Maps from "./Components/Maps";
 const MemberView = ({ history, location }) => {
   return (
     <Container>
@@ -17,7 +18,6 @@ const MemberView = ({ history, location }) => {
             location={location}
           ></AvailableProjects>
         </Grid>
-
         <Grid item lg={3} sm={6} xl={3} xs={12}>
           <Communication history={history} location={location} />
         </Grid>
@@ -26,6 +26,9 @@ const MemberView = ({ history, location }) => {
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12}>
           <Calendar history={history} location={location} />
+        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}>
+          <Maps history={history} location={location} />
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12}>
           <DocumentManager history={history} location={location} />

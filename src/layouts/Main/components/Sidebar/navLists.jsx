@@ -13,6 +13,7 @@ import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import MapIcon from "@mui/icons-material/Map";
 
 export const memberList = [
   { id: "home", path: "/home", label: "Home", icon: Dashboard },
@@ -39,6 +40,12 @@ export const memberList = [
     path: "/calendar",
     label: "Calendar",
     icon: CalendarTodayIcon,
+  },
+  {
+    id: "maps",
+    path: "/maps",
+    label: "Maps",
+    icon: MapIcon,
   },
   { id: "library", path: "/library", label: "Library", icon: MenuBookIcon },
 ];
