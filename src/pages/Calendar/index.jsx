@@ -13,6 +13,7 @@ import {
 } from "../../shared/services/calendar.service";
 import CalendarHeader from "./CalendarHeader";
 import EventEditorDialog from "./EventEditorDialog";
+import axios from "axios";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -23,7 +24,7 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 const CalendarRoot = styled("div")(({ theme }) => ({
-  height: "100vh",
+  height: "80vh",
   display: "flex",
   flexDirection: "column",
 }));
@@ -37,17 +38,28 @@ const EventCalendar = () => {
   const [newEvent, setNewEvent] = useState(null);
   const [shouldShowEventDialog, setShouldShowEventDialog] = useState(false);
   const headerComponentRef = useRef(null);
+
   const updateCalendar = () => {
-    getAllEvents()
-      .then((res) => res.data)
-      .then((events) => {
-        events = events?.map((e) => ({
-          ...e,
-          start: new Date(e?.start),
-          end: new Date(e?.end),
-        }));
-        setEvents(events);
-      });
+    try {
+      axios.defaults.headers["Content-Type"] = "application/json";
+      axios.defaults.headers["accept"] = "application/javascript";
+      axios.defaults.headers["Authorization"] = localStorage.getItem("token");
+      axios.defaults.headers["Project"] = localStorage.getItem("project_id");
+      axios
+        .get(`${process.env.REACT_APP_API_BASE_URL}/calanders`, {})
+        .then((res) => {
+          var allEvents = res?.data?.data?.map((e) => ({
+            ...e?.attributes,
+            // start: new Date(e?.start_date),
+            // end: new Date(e?.end_date),
+          }));
+          console.log(allEvents);
+          setEvents(allEvents);
+        })
+        .catch((error) => console.error(error));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleDialogClose = () => {
@@ -116,18 +128,18 @@ const EventCalendar = () => {
             views={viewList}
             step={60}
             showMultiDayTimes
-            components={{
-              toolbar: (props) => {
-                return headerComponentRef.current ? (
-                  ReactDOM.createPortal(
-                    <CalendarHeader {...props} />,
-                    headerComponentRef.current
-                  )
-                ) : (
-                  <h3>There are no scheduled events</h3>
-                );
-              },
-            }}
+            // components={{
+            //   toolbar: (props) => {
+            //     return headerComponentRef.current ? (
+            //       ReactDOM.createPortal(
+            //         <CalendarHeader {...props} />,
+            //         headerComponentRef.current
+            //       )
+            //     ) : (
+            //       <h3>There are no scheduled events</h3>
+            //     );
+            //   },
+            // }}
             // onNavigate={handleNavigate}
             onSelectEvent={(event) => {
               openExistingEventDialog(event);
