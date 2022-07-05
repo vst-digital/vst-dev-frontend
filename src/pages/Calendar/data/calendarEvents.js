@@ -4,7 +4,7 @@ const Mock = new MockAdapter(axios)
 const date = new Date()
 
 const calendarEventDB = {
-//This is how the API get method response should be structured
+    //This is how the API get method response should be structured
     events: [
         {
             id: '344jdfher3wh23',
