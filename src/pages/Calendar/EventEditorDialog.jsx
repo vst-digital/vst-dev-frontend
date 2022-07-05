@@ -203,18 +203,12 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
             <DateTimePicker
               onChange={(date) => handleDateChange(date, "start")}
               value={start}
-              renderInput={(props) => (
-                <TextField {...props} label="Start date" variant="standard" />
-              )}
             />
           </Grid>
           <Grid item sm={6} xs={12}>
             <DateTimePicker
               onChange={(date) => handleDateChange(date, "end")}
               value={end}
-              renderInput={(props) => (
-                <TextField {...props} label="End date" variant="standard" />
-              )}
             />
           </Grid>
         </Grid>

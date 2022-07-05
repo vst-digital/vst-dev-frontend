@@ -6,12 +6,10 @@ import { Box, styled } from "@mui/system";
 import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
-import * as ReactDOM from "react-dom";
 import {
   getAllEvents,
   updateEvent,
 } from "../../shared/services/calendar.service";
-import CalendarHeader from "./CalendarHeader";
 import EventEditorDialog from "./EventEditorDialog";
 import axios from "axios";
 
@@ -128,19 +126,6 @@ const EventCalendar = () => {
             views={viewList}
             step={60}
             showMultiDayTimes
-            // components={{
-            //   toolbar: (props) => {
-            //     return headerComponentRef.current ? (
-            //       ReactDOM.createPortal(
-            //         <CalendarHeader {...props} />,
-            //         headerComponentRef.current
-            //       )
-            //     ) : (
-            //       <h3>There are no scheduled events</h3>
-            //     );
-            //   },
-            // }}
-            // onNavigate={handleNavigate}
             onSelectEvent={(event) => {
               openExistingEventDialog(event);
             }}
