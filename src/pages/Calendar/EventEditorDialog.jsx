@@ -36,7 +36,7 @@ const DialogHeader = styled(DialogFooter)(() => ({
   padding: "10px 15px",
 }));
 
-const EventEditorDialog = ({ event = {}, open, handleClose }) => {
+const EventEditorDialog = ({ event = {}, open, handleClose, history }) => {
   const [calendarEvent, setCalendarEvent] = useState(event);
   const { notify, requestHandler } = useHttp();
   const [toggle, setToggle] = useState();
@@ -59,12 +59,13 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
         .then((res) => resolve(res.data))
         .catch((error) => reject(error));
     });
-  const handleChange = (event) => {
-    setCalendarEvent({
-      ...calendarEvent,
-      [event?.target?.name]: event?.target?.value,
-    });
-  };
+
+  // const handleChange = (event) => {
+  //   setCalendarEvent({
+  //     ...calendarEvent,
+  //     [event?.target?.name]: event?.target?.value,
+  //   });
+  // };
   const handleToggle = () => {
     if (toggle === "false") {
       setToggle("true");
@@ -96,12 +97,14 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
     }
     handleClose();
   };
+
   const handleDateChange = (date, name) => {
     setCalendarEvent({
       ...calendarEvent,
       [name]: date,
     });
   };
+  
   const handleSubmit = (event) => {
     let { id } = event?.id;
     if (id) {
@@ -160,90 +163,104 @@ const EventEditorDialog = ({ event = {}, open, handleClose }) => {
     }
   };
 
-  let { location, subject, start, end } = calendarEvent;
+  // let { location, subject, start, end } = calendarEvent;
 
-  const { values, touched, errors } = useFormik({
+  const { values, touched, errors, handleChange } = useFormik({
     initialValues: Calendar,
     validationSchema: Calendar_Validation,
+    onSubmit: handleSubmit,
   });
   return (
-    <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth={true}>
-      <DialogHeader>
-        <h1> New Event</h1>
-        <IconButton onClick={handleClose}>
-          <Icon sx={{ color: "#fff" }}>clear</Icon>
-        </IconButton>
-      </DialogHeader>
+    <form onSubmit={handleSubmit}>
+      <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth={true}>
+        <DialogHeader>
+          <h1> New Event</h1>
+          <IconButton onClick={handleClose}>
+            <Icon sx={{ color: "#fff" }}>clear</Icon>
+          </IconButton>
+        </DialogHeader>
 
-      <Box p={2}>
-        <Box py={1.3} />
-        <TextField
-          label="Subject"
-          onChange={handleChange}
-          type="text"
-          name="subject"
-          value={subject || ""}
-          multiline={true}
-          validators={["required"]}
-          errorMessages={["this field is required"]}
-          style={{ width: "100%", marginBottom: "24px" }}
-        />
-        <TextField
-          label="Location"
-          onChange={handleChange}
-          type="text"
-          name="location"
-          value={location || ""}
-          validators={["required"]}
-          errorMessages={["this field is required"]}
-          style={{ width: "100%", marginBottom: "24px" }}
-        />
-        <Grid container spacing={4}>
-          <Grid item sm={6} xs={12}>
-            <DateTimePicker
-              onChange={(date) => handleDateChange(date, "start")}
-              value={start}
-            />
+        <Box p={2}>
+          <Box py={1.3} />
+          <TextField
+            label="Subject"
+            id="subject"
+            onChange={handleChange}
+            type="text"
+            name="subject"
+            value={values.subject || ""}
+            multiline={true}
+            validators={["required"]}
+            errorMessages={["this field is required"]}
+            style={{ width: "100%", marginBottom: "24px" }}
+          />
+          <TextField
+            label="Location"
+            id="location"
+            onChange={handleChange}
+            type="text"
+            name="location"
+            value={values.location || ""}
+            validators={["required"]}
+            errorMessages={["this field is required"]}
+            style={{ width: "100%", marginBottom: "24px" }}
+          />
+          <Grid container spacing={4}>
+            <Grid item sm={6} xs={12}>
+              <DateTimePicker
+                id="start_date"
+                name="start_date"
+                onChange={handleChange}
+                value={values.start_date}
+              />
+            </Grid>
+            <Grid item sm={6} xs={12}>
+              <DateTimePicker
+                id="end_date"
+                name="end_date"
+                onChange={handleChange}
+                value={values.end_date}
+              />
+            </Grid>
           </Grid>
-          <Grid item sm={6} xs={12}>
-            <DateTimePicker
-              onChange={(date) => handleDateChange(date, "end")}
-              value={end}
-            />
-          </Grid>
-        </Grid>
 
-        {toggle === "false" && (
-          <Grid item xs={6}>
-            <AsyncSelect
-              id={"receiver_id"}
-              label="Members"
-              getOptionLabel={(getMemberLabel) => getMemberLabel?.email || ""}
-              loadingMethod={getReceiverList}
-              value={values.receiver_id}
-              onChange={onReceiverChange}
-              error={touched.receiver_id && Boolean(errors.receiver_id)}
-              helperText={touched.receiver_id && errors.receiver_id}
-              multiple
-              style={{ width: "100%", marginBottom: "4px", marginTop: "24px" }}
-            />
-          </Grid>
-        )}
-        <FormControlLabel
-          control={<Switch onChange={handleToggle} />}
-          label="Invite Members"
-        />
-        <DialogFooter>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Save
-          </Button>
-          <Button onClick={handleDeleteEvent}>
-            <Icon sx={{ mr: 1, verticalAlign: "middle" }}>delete</Icon>
-            Delete
-          </Button>
-        </DialogFooter>
-      </Box>
-    </Dialog>
+          {toggle === "false" && (
+            <Grid item xs={6}>
+              <AsyncSelect
+                id={"receiver_id"}
+                name="receiver_id"
+                label="Members"
+                getOptionLabel={(getMemberLabel) => getMemberLabel?.email || ""}
+                loadingMethod={getReceiverList}
+                value={values.receiver_id}
+                onChange={handleChange}
+                error={touched.receiver_id && Boolean(errors.receiver_id)}
+                helperText={touched.receiver_id && errors.receiver_id}
+                multiple
+                style={{
+                  width: "100%",
+                  marginBottom: "4px",
+                  marginTop: "24px",
+                }}
+              />
+            </Grid>
+          )}
+          <FormControlLabel
+            control={<Switch onChange={handleToggle} />}
+            label="Invite Members"
+          />
+          <DialogFooter>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+              Save
+            </Button>
+            <Button onClick={handleDeleteEvent}>
+              <Icon sx={{ mr: 1, verticalAlign: "middle" }}>delete</Icon>
+              Delete
+            </Button>
+          </DialogFooter>
+        </Box>
+      </Dialog>
+    </form>
   );
 };
 

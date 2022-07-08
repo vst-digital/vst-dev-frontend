@@ -1,7 +1,6 @@
-class Calendar{
+class Calendar {
   constructor(props) {
     const {
-      title = '',
       start_date = '',
       end_date = '',
       subject = '',
@@ -9,12 +8,11 @@ class Calendar{
       receiver_id = [],
       _destroy = false
     } = props || {};
-    this.title = title;
     this.subject = subject;
     this.start_date = start_date;
     this.end_date = end_date;
-    this.location = location;
+    this.locate = location;
     this.receiver_id = receiver_id;
   }
 }
-export {Calendar};
+export { Calendar };
