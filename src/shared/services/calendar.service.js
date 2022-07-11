@@ -1,17 +1,7 @@
-import axios from 'axios'
+const url = '/calanders';
+const getCalanderEvent = (params) => ({ url, method: 'get', params });
+const postCalanderEvent = (payload) => ({ url, method: 'post', data: payload });
+const putCalanderEvent = (payload) => ({ url, method: 'put', data: payload });
+const deleteCalanderEvent = (payload) => ({ url, method: 'delete', data: payload });
 
-export const getAllEvents = () => {
-    return axios.get('/api/calendar/events/all')
-}
-
-export const addNewEvent = (event) => {
-    return axios.post('/api/calendar/events/add', event)
-}
-
-export const updateEvent = (event) => {
-    return axios.post('/api/calendar/events/update', event)
-}
-
-export const deleteEvent = (event) => {
-    return axios.post('/api/calendar/events/delete', event)
-}
+export { getCalanderEvent, postCalanderEvent, putCalanderEvent, deleteCalanderEvent };

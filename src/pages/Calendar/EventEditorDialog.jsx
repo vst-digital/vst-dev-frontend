@@ -13,18 +13,12 @@ import {
 } from "@mui/material";
 import { DateTimePicker } from "@material-ui/pickers";
 import { AsyncSelect } from "components";
-import {
-  addNewEvent,
-  updateEvent,
-  deleteEvent,
-} from "../../shared/services/calendar.service";
 
 import { Calendar_Validation } from "shared/utilities/validationSchema.util";
 import { Calendar } from "shared/models";
 import { useHttp } from "hooks";
 import { getSelectDataSource } from "shared/utilities/common.util";
-import { getAllMembersList } from "shared/services";
-import axios from "axios";
+import { getCalanderEvent, postCalanderEvent, putCalanderEvent, deleteCalanderEvent, getAllMembersList } from "shared/services";
 
 const DialogFooter = styled(Box)(() => ({
   display: "flex",
@@ -74,104 +68,40 @@ const EventEditorDialog = ({ event = {}, open, handleClose, history }) => {
     }
   };
 
-  const handleDeleteEvent = (event) => {
-    let id = event?.id;
-    if (id) {
-      try {
-        axios.defaults.headers["Content-Type"] = "application/json";
-        axios.defaults.headers["accept"] = "application/json";
-        axios.defaults.headers["Authorization"] = localStorage.getItem("token");
-        axios.defaults.headers["Project"] = localStorage.getItem("project_id");
-        axios
-          .delete(`${process.env.REACT_APP_API_BASE_URL}/calendars/${id}`)
-          .then((res) => {
-            if (res?.statusText === "OK") {
-              console.log("deleted");
-            }
-          })
-          .catch((error) => console.error(error));
-      } catch (e) {
-        console.log(e);
-      }
-      handleClose();
+  const onConfirm = async () => {
+    const payload = { calander: values };
+    try {
+      const requestConfig = postCalanderEvent(payload);
+      await requestHandler(requestConfig, { loader: true });
+      notify({ msg: 'Calander has been saved successfully!!', type: 'success' });
+      history.push('/calendar');
+    } catch (e) {
+      debugger
+      notify({ msg: 'Not able to save calendar. Something went wrong!!', type: 'error' });
     }
-    handleClose();
   };
 
-  const handleDateChange = (date, name) => {
-    setCalendarEvent({
-      ...calendarEvent,
-      [name]: date,
-    });
-  };
-  
-  const handleSubmit = (event) => {
-    let { id } = event?.id;
-    if (id) {
-      try {
-        axios.defaults.headers["Content-Type"] = "application/json";
-        axios.defaults.headers["accept"] = "application/json";
-        axios.defaults.headers["Authorization"] = localStorage.getItem("token");
-        axios.defaults.headers["Project"] = localStorage.getItem("project_id");
-        axios
-          .put(`${process.env.REACT_APP_API_BASE_URL}/calanders/${id}`, {
-            calander: {
-              start_date: event?.start_date,
-              end_date: event?.end_date,
-              subject: event?.subject,
-              location: event?.location,
-            },
-          })
-          .then(() => {
-            console.log(event);
-          })
-          .catch((error) => console.error(error));
-      } catch (e) {
-        console.log(e);
-      }
-      handleClose();
-    } else {
-      const newEvent = {
-        subject: calendarEvent?.subject,
-        location: calendarEvent?.location,
-        start_date: new Date(calendarEvent?.start),
-        end_date: new Date(calendarEvent?.end),
-      };
-      console.log(newEvent);
-      try {
-        axios.defaults.headers["Content-Type"] = "application/json";
-        axios.defaults.headers["accept"] = "application/json";
-        axios.defaults.headers["Authorization"] = localStorage.getItem("token");
-        axios.defaults.headers["Project"] = localStorage.getItem("project_id");
-        axios
-          .post(`${process.env.REACT_APP_API_BASE_URL}/calanders`, {
-            calander: {
-              start_date: newEvent?.start_date,
-              end_date: newEvent?.end_date,
-              subject: newEvent?.subject,
-              location: newEvent?.location,
-            },
-          })
-          .then(() => {
-            console.log(1);
-            console.log(newEvent);
-          })
-          .catch((error) => console.error(error));
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
+  const handleStartDateChange = (calander_instance) => {
+    let calander = new Calendar(values);
+    calander.start_date = calander_instance
+    setValues(calander)
+  }
+
+  const handleEndDateChange = (calander_instance) => {
+    let calander = new Calendar(values);
+    calander.end_date = calander_instance
+    setValues(calander)
+  }
 
   // let { location, subject, start, end } = calendarEvent;
 
-  const { values, touched, errors, handleChange } = useFormik({
+  const { values, touched, errors, handleChange, setValues } = useFormik({
     initialValues: Calendar,
     validationSchema: Calendar_Validation,
-    onSubmit: handleSubmit,
+    onSubmit: onConfirm,
   });
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={onConfirm}>
       <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth={true}>
         <DialogHeader>
           <h1> New Event</h1>
@@ -210,7 +140,7 @@ const EventEditorDialog = ({ event = {}, open, handleClose, history }) => {
               <DateTimePicker
                 id="start_date"
                 name="start_date"
-                onChange={handleChange}
+                onChange={handleStartDateChange}
                 value={values.start_date}
               />
             </Grid>
@@ -218,7 +148,7 @@ const EventEditorDialog = ({ event = {}, open, handleClose, history }) => {
               <DateTimePicker
                 id="end_date"
                 name="end_date"
-                onChange={handleChange}
+                onChange={handleEndDateChange}
                 value={values.end_date}
               />
             </Grid>
@@ -250,13 +180,13 @@ const EventEditorDialog = ({ event = {}, open, handleClose, history }) => {
             label="Invite Members"
           />
           <DialogFooter>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button variant="contained" color="primary" onClick={onConfirm}>
               Save
             </Button>
-            <Button onClick={handleDeleteEvent}>
+            {/* <Button onClick={handleDeleteEvent}>
               <Icon sx={{ mr: 1, verticalAlign: "middle" }}>delete</Icon>
               Delete
-            </Button>
+            </Button> */}
           </DialogFooter>
         </Box>
       </Dialog>
