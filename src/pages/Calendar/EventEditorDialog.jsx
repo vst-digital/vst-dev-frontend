@@ -15,7 +15,7 @@ import { DateTimePicker } from "@material-ui/pickers";
 import { AsyncSelect } from "components";
 
 import { Calendar_Validation } from "shared/utilities/validationSchema.util";
-import { Calendar } from "shared/models";
+import { Calendar, SharedCalanderEvents } from "shared/models";
 import { useHttp } from "hooks";
 import { getSelectDataSource } from "shared/utilities/common.util";
 import { getCalanderEvent, postCalanderEvent, putCalanderEvent, deleteCalanderEvent, getAllMembersList } from "shared/services";
@@ -54,12 +54,14 @@ const EventEditorDialog = ({ event = {}, open, handleClose, history }) => {
         .catch((error) => reject(error));
     });
 
-  // const handleChange = (event) => {
-  //   setCalendarEvent({
-  //     ...calendarEvent,
-  //     [event?.target?.name]: event?.target?.value,
-  //   });
-  // };
+  const handleMemberChange = (event) => {
+    debugger
+    let calander = new Calendar(values);
+    // calander.receiver_id.push(event);
+    calander.shared_calander_events_attributes = {"shared_with_id": event.map(x => x.id)};
+    setCalendarEvent(calander);
+  };
+
   const handleToggle = () => {
     if (toggle === "false") {
       setToggle("true");
@@ -81,15 +83,16 @@ const EventEditorDialog = ({ event = {}, open, handleClose, history }) => {
     }
   };
 
-  const handleStartDateChange = (calander_instance) => {
+  const handleStartDateChange = (selected_date) => {
+    debugger
     let calander = new Calendar(values);
-    calander.start_date = calander_instance
+    calander.start_date = selected_date
     setValues(calander)
   }
 
-  const handleEndDateChange = (calander_instance) => {
+  const handleEndDateChange = (selected_date) => {
     let calander = new Calendar(values);
-    calander.end_date = calander_instance
+    calander.end_date = selected_date
     setValues(calander)
   }
 
@@ -163,7 +166,7 @@ const EventEditorDialog = ({ event = {}, open, handleClose, history }) => {
                 getOptionLabel={(getMemberLabel) => getMemberLabel?.email || ""}
                 loadingMethod={getReceiverList}
                 value={values.receiver_id}
-                onChange={handleChange}
+                onChange={handleMemberChange}
                 error={touched.receiver_id && Boolean(errors.receiver_id)}
                 helperText={touched.receiver_id && errors.receiver_id}
                 multiple
