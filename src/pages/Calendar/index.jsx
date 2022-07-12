@@ -43,7 +43,7 @@ const EventCalendar = (props) => {
       const requestConfig = getCalanderEvent(payload);
       const res = await requestHandler(requestConfig, { loader: true });
       debugger
-      setEvents(events);
+      setEvents(res.data);
       notify({ msg: 'Calander has been saved successfully!!', type: 'success' });
     } catch (e) {
       debugger
