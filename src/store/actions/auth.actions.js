@@ -1,5 +1,6 @@
 import { refreshAuthorization } from "shared/services";
 import { instance as axios } from "shared/services/config.service";
+import { tokenDecoder } from "shared/utilities/common.util";
 
 import {
   AUTH_FAILURE,
@@ -34,37 +35,21 @@ export const authLogout = () => {
 
 export const authCheckState = (history) => (dispatch) => {
   const path = window?.location?.pathname;
-  const token = localStorage.getItem("token");
-  const refreshToken = localStorage.getItem("refreshToken");
+  const { token, isExpired, refreshToken } = tokenDecoder();
 
-  const expirationTime = new Date(localStorage.getItem("expirationTime"));
+  const currentTime = Math.floor(new Date().getTime() / 1000);
+  const expirationTime = localStorage.getItem("expirationTime");
+
   if (token) {
-    if (expirationTime <= new Date()) {
+    if (isExpired) {
       dispatch(authLogout());
       history.push("/signIn");
     } else {
       dispatch(authSuccess({ data: { token, refreshToken } }));
-      dispatch(
-        checkAuthTimeout(
-          (expirationTime.getTime() - new Date().getTime()) / 1000
-        )
-      );
+      dispatch(checkAuthTimeout(expirationTime - currentTime));
     }
     // history.push(path);
   }
-
-  // TODO: remove all commented code if they are useless
-
-  // if (!token && (history.location.pathname != '/user_invitation/accept')) {
-  //     dispatch(authLogout());
-  //     history.push('/signIn');
-  // } else if (history.location.pathname == '/user_invitation/accept') {
-  //     dispatch(authLogout());
-  //     history.push(history.location.pathname+history.location.search);
-  // }
-  // else {
-
-  // }
 };
 
 export const checkAuthTimeout = (expirationTime) => (dispatch) => {
