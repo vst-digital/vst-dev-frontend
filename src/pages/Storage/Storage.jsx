@@ -152,6 +152,7 @@ const Storage = () => {
 
   const deleteFile = ({ item }) => {
     const id = item?.dataItem?.items[0]?.id;
+
     // TODO: move all these configs to axios service
     try {
       axios.defaults.headers["Content-Type"] = "application/json";
@@ -195,9 +196,20 @@ const Storage = () => {
   };
 
   // Common click event on file manager
-  const onItemClick = ({ itemData }) => {
-    if (itemData?.text === "Share") {
-      handleClickOpen();
+  const onItemClick = (e) => {
+    const { itemData, fileSystemItem } = e;
+
+    switch (itemData?.name) {
+      case "Share":
+        handleClickOpen();
+        break;
+
+      case "delete":
+        // deleteFile(fileSystemItem?.dataItem);
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -333,7 +345,7 @@ const Storage = () => {
           <Item name="rename" beginGroup="true" />
           <Item name="upload" />
           <Item name="delete" />
-          <Item text="Share" icon="share" beginGroup="true"></Item>
+          <Item name="share" text="Share" icon="share" beginGroup="true"></Item>
           <Item name="download" text="Download a File" />
           <Item name="refresh" />
         </ContextMenu>

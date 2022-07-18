@@ -1,13 +1,13 @@
 import {
-  Button,
   Avatar,
+  Button,
   Card,
   CardContent,
   Grid,
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { ArrowDownwardRounded, DateRangeRounded } from "@material-ui/icons";
+import { DateRangeRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +46,7 @@ const Calendar = ({ history }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card id="calendar" className={classes.root}>
       <CardContent>
         <Grid container justifyContent="space-between">
           <Grid item>

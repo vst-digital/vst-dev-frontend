@@ -25,6 +25,7 @@ const Communication = () => {
   );
 
   const cardProps = {
+    id: "communication",
     title: "Communication",
     path: "/communications",
     IconComp,

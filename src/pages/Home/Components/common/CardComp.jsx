@@ -3,12 +3,12 @@ import { useHistory } from "react-router-dom";
 import { useStyles } from "./CardStyle";
 
 const CardComp = (props) => {
-  const { title, IconComp, path } = props;
+  const { title, IconComp, path, id } = props;
 
   const classes = useStyles();
   const history = useHistory();
   return (
-    <Card className={classes?.root} onClick={() => history.push(path)}>
+    <Card id={id} className={classes?.root} onClick={() => history.push(path)}>
       <CardContent>
         <Grid container justifyContent="space-between">
           <Grid item>
