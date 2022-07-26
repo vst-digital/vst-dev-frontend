@@ -1,3 +1,4 @@
+import Joyride from "react-joyride";
 import Grid from "@material-ui/core/Grid";
 import { Container } from "components";
 import AvailableProjects from "./Components/AvailableProjects";
@@ -7,10 +8,22 @@ import DocumentManager from "./Components/DocumentManager";
 import Library from "./Components/Library";
 import ChatModule from "./Components/ChatModule";
 import Inspection from "./Components/Inspection";
+import { steps } from "../../shared/utilities/appTour";
+
 const MemberView = ({ history, location }) => {
   return (
     <Container>
       <Grid container spacing={2}>
+        <Joyride
+          run={true}
+          continuous
+          showProgress
+          showSkipButton
+          // enabled={stepsEnabled}
+          steps={steps}
+          // initialStep={initialStep}
+          // onExit={onExit}
+        />
         <Grid item lg={3} sm={6} xl={3} xs={12}>
           <AvailableProjects
             history={history}
