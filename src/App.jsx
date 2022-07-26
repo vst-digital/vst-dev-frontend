@@ -1,6 +1,5 @@
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import Joyride from "react-joyride";
 
 import { useEffect, useState } from "react";
 import { Chart } from "react-chartjs-2";
@@ -14,7 +13,6 @@ import { MainLayout, MinimalLayout } from "./layouts";
 import { draw } from "./mixins/chartjs";
 import LocalizedDateFnsUtils from "./mixins/LocalizedDateFnsUtils";
 import Routes from "./routes/index";
-import { steps } from "./shared/utilities/appTour";
 import { authCheckState } from "./store/actions/auth.actions";
 
 Chart.helpers.extend(Chart.elements.Rectangle.prototype, { draw: draw });
@@ -78,12 +76,6 @@ const App = () => {
       <GlobalStyles />
       <MuiPickersUtilsProvider utils={LocalizedDateFnsUtils}>
         <>
-          <Joyride
-            // enabled={stepsEnabled}
-            steps={steps}
-            // initialStep={initialStep}
-            // onExit={onExit}
-          />
           <Spinner open={isLoading} />
           <Notification {...notification} />
           {_renderView()}
