@@ -24,7 +24,7 @@ const ViewAllMemo = ({ history }) => {
       <Grid item xs={12}>
         <Tabs
           indicatorColor={"primary"}
-          className={classes.tabsRoot}
+          className={classes?.tabsRoot}
           value={tabIndex}
           onChange={handleChange}
         >

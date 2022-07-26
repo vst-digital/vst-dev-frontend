@@ -1,19 +1,22 @@
+import { useState } from "react";
 import { Button, makeStyles, Menu, MenuItem, SvgIcon } from "@material-ui/core";
 import AddRounded from "@material-ui/icons/AddRounded";
-import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import MoreIcon from "@material-ui/icons/MoreVert";
+import DeleteIcon from "@material-ui/icons/Delete";
 import ViewIcon from "@material-ui/icons/Visibility";
-import { useState } from "react";
+import MoreIcon from "@material-ui/icons/MoreVert";
 
-import { ConfirmModal, Container, IndexTable } from "components";
 import { useHttp } from "hooks";
-import { MemoTemplate } from "shared/models";
+import { ConfirmModal, Container, IndexTable } from "components";
 import {
-  deleteMemoTemplate, getMemoTemplate, getMemoTemplates
+  getMemoTemplates,
+  getMemoTemplate,
+  postMemoTemplate,
+  deleteMemoTemplate,
 } from "shared/services";
-import { createArray } from "shared/utilities/common.util";
+import { MemoTemplate } from "shared/models";
 import { MemoTemplateSchema } from "shared/utilities/dataGridSchema";
+import { createArray } from "shared/utilities/common.util";
 
 const useStyles = makeStyles((theme) => ({
   moreBtn: {
@@ -28,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewTemplate = ({ history }) => {
+export const Templates = ({ history }) => {
   const classes = useStyles();
   const { notify, requestHandler } = useHttp();
   const [refreshTable, setRefreshTable] = useState(false);
@@ -125,7 +128,7 @@ const NewTemplate = ({ history }) => {
   };
 
   const onAddClick = () =>
-    history.push(`/memo_template/new`, {
+    history.push(`/inspection_template/new`, {
       data: { action: "Add", memoTemplate: new MemoTemplate() },
     });
 
@@ -136,7 +139,7 @@ const NewTemplate = ({ history }) => {
       const res = await requestHandler(getMemoTemplate(id, params), {
         loader: true,
       });
-      history.push(`/memo_template/edit`, {
+      history.push(`/inspection_template/edit`, {
         data: { action: "Edit", memoTemplate: new MemoTemplate(res.data) },
       });
     } catch (e) {
@@ -185,7 +188,7 @@ const NewTemplate = ({ history }) => {
         close={closeConfirmModal}
       />
       <Container
-        title="Template"
+        title="Templates"
         actions={
           <Button
             variant="contained"
@@ -193,7 +196,7 @@ const NewTemplate = ({ history }) => {
             startIcon={<AddRounded />}
             onClick={onAddClick}
           >
-            Create Template
+            Create Inspection Template
           </Button>
         }
       >
@@ -217,5 +220,3 @@ const NewTemplate = ({ history }) => {
     </>
   );
 };
-
-export default NewTemplate;

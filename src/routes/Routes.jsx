@@ -55,6 +55,25 @@ const MEMOTEMPLATE = {
   ),
 };
 
+const INSPECTIONTEMPLATE = {
+  ALL: loadable(() =>
+    import("../pages/Inspection/Components/NewTemplate")
+  ),
+  VIEW: loadable(() =>
+    import("../pages/Inspection/CreatorPages/ViewMemoTemplate")
+  ),
+  NEW: loadable(() =>
+    import(
+      "../pages/Inspection/CreatorPages/CreateUpdateMemoTemplate"
+    )
+  ),
+  EDIT: loadable(() =>
+    import(
+      "../pages/Inspection/CreatorPages/CreateUpdateMemoTemplate"
+    )
+  ),
+};
+
 const COMMUNICATION = {
   ALL: loadable(() => import("../pages/Communication/CommunicationIndex")),
 };
@@ -74,6 +93,7 @@ export const siteOwnerPages = [
   { id: "group_edit", path: "/group/edit", component: GROUP.EDIT },
   { id: "group_new", path: "/group/new", component: GROUP.NEW },
 ];
+
 export const projectAdminPages = [
   { id: "contact", path: "/contacts", component: CONTACT.VIEW },
   { id: "contact_edit", path: "/contact/edit", component: CONTACT.EDIT },
@@ -89,6 +109,7 @@ export const projectAdminPages = [
   { id: "group_edit", path: "/group/edit", component: GROUP.EDIT },
   { id: "group_new", path: "/group/new", component: GROUP.NEW },
 ];
+
 export const memberPages = [
   { id: "dashboard", path: "/dashboard", component: Dashboard },
   { id: "home", path: "/home", component: Home },
@@ -106,6 +127,27 @@ export const memberPages = [
     path: "/inspection/new",
     component: INSPECTION.NEW,
   },
+  {
+    id: "inspection_template_new",
+    path: "/inspection_template/new",
+    component: INSPECTIONTEMPLATE.NEW,
+  },
+  {
+    id: "inspection_template_all",
+    path: "/inspection_template/all",
+    component: INSPECTIONTEMPLATE.ALL,
+  },
+  {
+    id: "inspection_template_edit",
+    path: "/inspection_template/edit",
+    component: INSPECTIONTEMPLATE.EDIT,
+  },
+  {
+    id: "inspection_template_view",
+    path: "/inspection_template/view",
+    component: INSPECTIONTEMPLATE.VIEW,
+  },
+
   {
     id: "memo_template_new",
     path: "/memo_template/new",

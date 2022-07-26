@@ -25,6 +25,7 @@ const DocumentManager = () => {
   );
 
   const cardProps = {
+    id: "file-manager",
     title: "File Manager",
     path: "/storages",
     IconComp,

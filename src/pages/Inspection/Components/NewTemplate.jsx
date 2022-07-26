@@ -1,22 +1,19 @@
-import { useState } from "react";
 import { Button, makeStyles, Menu, MenuItem, SvgIcon } from "@material-ui/core";
 import AddRounded from "@material-ui/icons/AddRounded";
-import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import ViewIcon from "@material-ui/icons/Visibility";
+import EditIcon from "@material-ui/icons/Edit";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import ViewIcon from "@material-ui/icons/Visibility";
+import { useState } from "react";
 
-import { useHttp } from "hooks";
 import { ConfirmModal, Container, IndexTable } from "components";
-import {
-  getMemoTemplates,
-  getMemoTemplate,
-  postMemoTemplate,
-  deleteMemoTemplate,
-} from "shared/services";
+import { useHttp } from "hooks";
 import { MemoTemplate } from "shared/models";
-import { MemoTemplateSchema } from "shared/utilities/dataGridSchema";
+import {
+  deleteMemoTemplate, getMemoTemplate, getMemoTemplates
+} from "shared/services";
 import { createArray } from "shared/utilities/common.util";
+import { MemoTemplateSchema } from "shared/utilities/dataGridSchema";
 
 const useStyles = makeStyles((theme) => ({
   moreBtn: {
@@ -31,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Templates = ({ history }) => {
+const NewTemplate = ({ history }) => {
   const classes = useStyles();
   const { notify, requestHandler } = useHttp();
   const [refreshTable, setRefreshTable] = useState(false);
@@ -188,7 +185,7 @@ export const Templates = ({ history }) => {
         close={closeConfirmModal}
       />
       <Container
-        title="Templates"
+        title="Template"
         actions={
           <Button
             variant="contained"
@@ -220,3 +217,5 @@ export const Templates = ({ history }) => {
     </>
   );
 };
+
+export default NewTemplate;

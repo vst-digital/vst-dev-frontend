@@ -72,7 +72,7 @@ const SelectProject = ({ history }) => {
     });
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form id="project-select" onSubmit={handleSubmit}>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Select Project</DialogTitle>
         <DialogContent>

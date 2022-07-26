@@ -1,0 +1,48 @@
+.communication-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+
+  .react-form-builder-toolbar {
+    margin-top: 0;
+    margin-left: 2%;
+  }
+
+  .modal {
+    display: flex !important;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1200;
+
+    .modal-dialog {
+      width: 50vw;
+      max-width: none;
+
+      .modal-content {
+        padding: 10%;
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .react-form-builder-toolbar {
+      margin-top: 2%;
+      position: inherit;
+      border: 1px solid lightgray;
+      bottom: 0;
+      height: max-content;
+      padding: 0;
+
+      ul {
+        height: 45vh;
+
+        .toolbar-item {
+          width: auto;
+        }
+      }
+    }
+  }
+}

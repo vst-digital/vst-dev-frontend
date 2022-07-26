@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import { Templates } from "./Templates";
+import { Templates } from "./InspectionSheets";
 import { Sheets } from "./Sheets";
 const useStyles = makeStyles((theme) => ({
   tabsRoot: { borderBottom: `1px solid ${theme.palette.grey[300]}` },
@@ -25,7 +25,7 @@ const Inspection = ({ history }) => {
           value={tabIndex}
           onChange={handleChange}
         >
-          <Tab label={"Templates"} />
+          <Tab label={"Inspection Templates"} />
           <Tab label={"Inspection Sheets"} />
         </Tabs>
       </Grid>

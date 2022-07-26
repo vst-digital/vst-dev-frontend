@@ -25,6 +25,7 @@ const Library = () => {
   );
 
   const cardProps = {
+    id: "library",
     title: "Library",
     path: "/library",
     IconComp,

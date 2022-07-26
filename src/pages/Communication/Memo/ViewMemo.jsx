@@ -19,12 +19,15 @@ import { Memo, MemoReply } from "shared/models";
 import { Memo_Reply_Validation } from "shared/utilities/validationSchema.util";
 import { createArray, formatDateTime } from "shared/utilities/common.util";
 import { Container } from "components";
-import { ReactFormGenerator, ElementStore } from "react-form-builder2";
+import {
+  ReactFormGenerator,
+  ElementStore,
+} from "anubhav-react-form-builder";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Parser } from "html-to-react";
-import "react-form-builder2/dist/app.css";
-import "../Components/SideBar/styes/CommunicationBase.scss";
+import "anubhav-react-form-builder/dist/app.css";
+// import "../Components/SideBar/styes/CommunicationBase.scss";
 import actionCable from "actioncable";
 import * as React from "react";
 import useSound from "use-sound";

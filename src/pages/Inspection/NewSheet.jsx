@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import get from "lodash/get";
 import { useFormik } from "formik";
 import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
-import "react-form-builder2/dist/app.css";
+import "anubhav-react-form-builder/dist/app.css";
 import { useHttp } from "hooks";
 import { AsyncSelect, Container, Panel, TextField } from "components";
 import { Memo } from "shared/models";
 import { Memo_Validation } from "shared/utilities/validationSchema.util";
 // import { postMemoTemplate } from "shared/services";
-import { ReactFormGenerator, ElementStore } from "react-form-builder2";
+import {
+  ReactFormGenerator,
+  ElementStore,
+} from "anubhav-react-form-builder";
 import {
   getMemoTemplates,
   getMembers,
